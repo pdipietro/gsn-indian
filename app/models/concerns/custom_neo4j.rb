@@ -1,3 +1,4 @@
+
 module CustomNeo4j
   extend ActiveSupport::Concern
  
@@ -73,23 +74,23 @@ module CustomNeo4j
 
 
   def upload_file
-    # Rails.logger.debug "LLLLLLLLLLLLLLLLLLLLLLLLLLLLLL"
-    # Rails.logger.debug self.avatar_attribute.inspect
-    # tmp_directory = "tmp/uploads/#{Time.now.to_i}"
-    # directory = "public/systems/#{self.uuid}"
-    # FileUtils.mkdir directory
-    # FileUtils.cp_r "tmp/uploads/#{Time.now.to_i}/.", "public/systems/#{self.uuid}"
+
     input_data = self.avatar_attribute
     
     name = input_data.original_filename
     content_type = input_data.content_type.chomp
-    directory = "public/systems/#{self.uuid}"
-    FileUtils.mkdir directory
+    directory_path = "public/systems/#{self.uuid}"
+    directory_path_original = "public/systems/#{self.uuid}/original"
+    directory_path_small = "public/systems/#{self.uuid}/small"
+    FileUtils::mkdir_p directory_path_original
+    FileUtils::mkdir_p directory_path_small
     # create the file path
-    path = File.join(directory, name)
+    original_path = File.join(directory_path_original, name)
+    small_path    = File.join(directory_path_small, name)
     # write the file
-    File.open(path, "wb") { |f| f.write(input_data.read) }
-
+    File.open(original_path, "wb") { |f| f.write(input_data.read) }
+    system("convert -size 70x70  #{original_path}  -resize '70x70^' -gravity center -crop '70x70+0+0'  #{small_path} ")
+  
   end
 
 end

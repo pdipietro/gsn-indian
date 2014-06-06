@@ -7,7 +7,13 @@ module CustomNodeRelationship
         relation = options[:relation]
         label    = options[:label]
         color    = options[:color]
-        url    = options[:url].present? ? options[:url] : "/assets/img/img1.png"
+        image_url = "/assets/icon/crowdup/#{label.try(:downcase)}.png"        
+        check_url =  "#{Rails.root}/app/assets/images/icon/crowdup/#{label.try(:downcase)}.png"     
+
+        check_file = File.exist?(check_url)        
+        default_url = check_file ? image_url : "/assets/img/img3.png"        
+        # url    = options[:url].present? ? options[:url] : default_url
+        url    = default_url
         relation_name = []
         relation_id = []
         node.rels.each do |rel|

@@ -54,10 +54,10 @@
 $(document).ready(function(){
     $('#node_color_field').minicolors();
     $("a[rel='tooltip']").tooltip({'placement': 'right', 'z-index': '3000'});
-
-    $("#header_profile_link").click(function(){
+    
+    $(document).on("click", "#header_profile_link", function() {
     	$("#profileModal").modal("show");
-    })
+    });
 });
 
 
