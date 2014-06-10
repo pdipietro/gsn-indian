@@ -276,8 +276,8 @@ var click_node_event = function(s){
           $("#selected_node_container").show();
           get_node_ele();
           selected_node = e.data.node
-          console.log(e)
-          console.log(e.data)
+          // console.log(e)
+          // console.log(e.data)
 
           if(first_node_id==""){
             set_selected_node(e, first_node, selected_node, "Start node")
@@ -386,7 +386,7 @@ var set_selected_node = function(node, node_ele, selected_node, node_pos){
   node_ele.text(node_pos + ": " + selected_node.label)
   node_ele.attr('data-id', selected_node.id)
   html= "<ul><h4>" + node_pos + ": " + selected_node.label + "</h4><li>"+ show_attributes(node) +"</li></ul>"
-  console.log(html)
+  // console.log(html)
   node_ele.html(html)
 }
 

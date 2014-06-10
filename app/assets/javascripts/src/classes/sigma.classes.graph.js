@@ -324,7 +324,10 @@
       throw 'The node must have a string id.';
 
     if (this.nodesIndex[node.id])
-      throw 'The node "' + node.id + '" already exists.';
+    {      
+      alert('The node "' + node.id + '" already exists.');
+    }
+      // throw 'The node "' + node.id + '" already exists.';
 
     var k,
         id = node.id,
