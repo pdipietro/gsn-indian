@@ -24,7 +24,6 @@
 
 var load_graph = function(graph_data, node_ids){
 
-
 sigma.utils.pkg('sigma.canvas.nodes');
 sigma.canvas.nodes.image = (function() {
   var _cache = {},
@@ -171,6 +170,7 @@ urls.forEach(function(url) {
       }
     });
 
+
 });
 
 
@@ -233,7 +233,7 @@ var double_click_node_event = function(s){
          //  $("#modal_body_content").html(attr_node);
          //  $("#nodeModal").modal("show");
 
-              $.ajax({
+          $.ajax({
             type: "GET",
             url: "/users/"+ e.data.node.id +"/show_other_node?node_ids="+node_ids
               
@@ -276,6 +276,8 @@ var click_node_event = function(s){
           $("#selected_node_container").show();
           get_node_ele();
           selected_node = e.data.node
+          console.log(e)
+          console.log(e.data)
 
           if(first_node_id==""){
             set_selected_node(e, first_node, selected_node, "Start node")
@@ -373,6 +375,8 @@ var show_attributes = function(e){
       case 'NodeAttribute': 
         attr_node = get_node_attribute_data(e, attr_node)
         break; 
+      default:
+        attr_node = get_all_data(e, attr_node)
     }
     return attr_node;
 }
@@ -386,6 +390,15 @@ var set_selected_node = function(node, node_ele, selected_node, node_pos){
   node_ele.html(html)
 }
 
+var get_all_data = function(e, attr_node){
+  node_prop = ''
+  $.each(e.data.node.properties.node, function(k, v) {
+    attr_node += node_html(k, v)
+    node_prop += node_html(k, v)
+  }); 
+  $("#node_prop_tooltip").attr('data-original-title', node_prop)
+  return attr_node; 
+}
 
 var get_user_data = function(e, attr_node){
   node_prop = ''
@@ -461,7 +474,7 @@ var get_node_type_data = function(e, attr_node){
 var get_node_attribute_data = function(e, attr_node){
   node_prop = ''
   $.each(e.data.node.properties.node, function(k, v) {
-    if(k=='name' ||  k==attr_type) {
+    if(k=='name' ||  k=="attr_type") {
       attr_node += node_html(k, v)
     }
     node_prop += node_html(k, v)

@@ -8,19 +8,32 @@ module CustomNodeRelationship
         label    = options[:label]
         color    = options[:color]
         image_url = "/assets/icon/crowdup/#{label.try(:downcase)}.png"        
-        check_url =  "#{Rails.root}/app/assets/images/icon/crowdup/#{label.try(:downcase)}.png"     
+        check_url =  "#{Rails.root}/app/assets/images/icon/crowdup/#{label.try(:downcase)}.png"  
+        prop_name = word_underscore(node.props[:name])
+      
+        if label.to_s=="Metamodel"
+          image_url = "/assets/icon/metamodel_img/mm.#{prop_name}.png"
+          check_url =  "#{Rails.root}/app/assets/images/icon/metamodel_img/mm.#{prop_name}.png"
+        else
+          image_url = "/assets/icon/crowdup/#{label.try(:downcase)}.png"
+          check_url =  "#{Rails.root}/app/assets/images/icon/crowdup/#{label.try(:downcase)}.png"
+        end
 
         check_file = File.exist?(check_url)        
-        default_url = check_file ? image_url : "/assets/img/img3.png"        
+        default_url = check_file ? image_url : "/assets/img/is_missing.png" 
+         
         # url    = options[:url].present? ? options[:url] : default_url
         url    = default_url
         relation_name = []
         relation_id = []
+
         node.rels.each do |rel|
           relation_name << rel.load_resource['type']
           relation_id <<  "Relation #{rel.neo_id}"
         end
-        label_html = "#{label}"
+
+        label_html = prop_name.present? ? "#{prop_name.try(:humanize)}" : "#{label}"
+       
 	 	    {
        	           id:         node.neo_id.to_s,  
        	           label:      label_html, 
@@ -58,6 +71,11 @@ module CustomNodeRelationship
             relation_name: relation_name
       }
 	 end
+
+  def word_underscore(word)
+    word.gsub(" ", '_').downcase  if word.present?
+    # word.scan(/[A-Z][a-z]*/).join("_").downcase if word.present?
+  end
 
 
 
