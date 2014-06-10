@@ -1,6 +1,6 @@
 <% provide(:title, "Sign in") %>
 
- <%= form_for(:session, url: sessions_path, html: { class: "form-signin auth_form"}, role: "form") do |f| %>
+ <%= form_for(:session, url: sessions_path, html: { class: "form-signin auth_form "}, role: "form") do |f| %>
           <h2 class="form-signin-heading">Please sign in</h2>
           <%= f.email_field :email, autofocus: true, class: "form-control", placeholder: "Email address", required: true %>
           <br>

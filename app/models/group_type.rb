@@ -7,7 +7,7 @@ class GroupType
   property :uuid 
   property :color, default: "#0000FF"
 
-  has_one(:creator).from(:users)
+  has_one(:is_owned_by).from(:users)
   has_n(:node_types).to(NodeType)
 
   

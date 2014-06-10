@@ -71,7 +71,7 @@ class GroupTypesController < ApplicationController
 
 		@group_type = GroupType.new()
 		if @group_type.save
-		  @group_type.creator = current_user
+		  @group_type.is_owned_by = current_user
 		  if params[:node_types].present?
 			  params[:node_types].each do |nt|
 			  	node_type = NodeType.find(nt)

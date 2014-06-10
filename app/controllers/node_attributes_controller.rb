@@ -15,7 +15,7 @@ class NodeAttributesController < ApplicationController
 		@attribute_type = NodeAttribute.new(attribute_type_params)
         	
 		if @attribute_type.save
-		  @attribute_type.creator = current_user
+		  @attribute_type.is_owned_by = current_user
 		  redirect_to node_attributes_path(identity: current_identity.uuid)
 		else
 		  render 'new'

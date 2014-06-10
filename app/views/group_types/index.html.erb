@@ -1,16 +1,18 @@
-<!-- <%# GroupType.all.each_with_index do |grp, index|%>
-  <h2> Group <%#= index%></h2>
-  <%# grp.node_types.each do |nt|%>
-    <p><%#= nt.field_name %></p>
-  <%# end %>
-<%# end %> -->
+ <div class="span6 offset3">
+ 	<%=link_to "New group type", new_group_type_path, class: "btn btn-primary", style: "position: relative; z-index: 99" %>
+<% GroupType.all.each_with_index do |grp, index|%>
+  <h2> Group <%= index%></h2>
+  <% grp.node_types.each do |nt|%>
+    <p><%= nt.field_name %></p>
+  <% end %>
+<% end %> 
+</div>
 
 <%#if GroupType.count == 0 %>
-  <%=link_to "New group type", new_group_type_path, class: "btn btn-primary", style: "position: relative; z-index: 99" %>
 <%# end %>
 
-<%= render "shared/graph_template"%>
-<%= render "shared/graph_script", parsed_data: @groups %>
+<%#= render "shared/graph_template"%>
+<%#= render "shared/graph_script", parsed_data: @groups %>
 
 
 

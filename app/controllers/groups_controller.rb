@@ -21,7 +21,7 @@ class GroupsController < ApplicationController
 		params[:node_types][:updated_at] = Time.now.to_i
 		group = Neo4j::Node.create(params[:node_types], :Group)
 		identity_group = current_identity.create_rel(:groups, group)
-        group_owner = group.create_rel(:is_owned_by, current_identity)		
+        group_owner = group.create_rel(:is_owned_by, current_user)		
 		redirect_to groups_path(identity: current_identity.uuid)		
 	end
 

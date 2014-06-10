@@ -12,7 +12,7 @@ class NodeTypesController < ApplicationController
 	def create
 		@node_type = NodeType.new(node_type_params)				
 		if @node_type.save
-		  @node_type.creator = current_user
+		  @node_type.is_owned_by = current_user
 		  params["node_attr_type"] ||= []
 		  params["node_attr_type"].each do |key, val|
 		  	

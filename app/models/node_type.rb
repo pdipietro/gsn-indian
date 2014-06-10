@@ -10,7 +10,7 @@ class NodeType
   property :field_name
   property :color, default: "#00FFFF"
 
-  has_one(:creator).from(:users)
+  has_one(:is_owned_by).from(:users)
   has_n(:properties).to(NodeAttribute)
   before_save { self.field_name = field_name.downcase }  
  

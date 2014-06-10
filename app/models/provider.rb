@@ -7,5 +7,6 @@ class Provider
   property :uuid 
   property :color, default: "#A52A2A"
   property :provider_name
+  has_one(:is_owned_by).from(:users)
 
 end

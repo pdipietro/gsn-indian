@@ -22,7 +22,7 @@ class NodeAttribute #< DefaultProperty
   validate :name_uniqueness
   # has_neo4jrb_attached_file :avatar_attribute
 
-  has_one(:creator).from(:users)
+  has_one(:is_owned_by).from(:users)
   before_save { self.name = name.downcase }
   before_save :set_file_attribute, if: Proc.new { |model| model.avatar_attribute.present? }
   after_save :upload_file, if: Proc.new { |model| model.avatar_attribute.present? }
