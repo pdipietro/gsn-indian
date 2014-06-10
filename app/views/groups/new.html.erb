@@ -1,14 +1,14 @@
 <% provide(:title, 'Group') %>
 
 <div class="row">
-  <div class="span6 offset3">
+  <div class="span6 offset3 auth_form">
     <%= form_for(:group, url: groups_path) do |f| %>
   	
       <% @node_types.each do |node_type| %>
         <% field_name = node_type.field_name %>
         <div style = "margin-bottom: 20px;">
           <p><%= label_tag field_name %></p>
-          <p><%= text_field_tag "node_types[#{field_name}]" %></p>
+          <p><%= text_field_tag "node_types[#{field_name}]", "", class: "form-control" %></p>
         </div>
       <% end %>
       <%#= hidden_field_tag "node_types[created_date]", "#{Time.now}" %>
