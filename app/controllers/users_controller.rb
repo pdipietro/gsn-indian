@@ -14,30 +14,59 @@ class UsersController < ApplicationController
     @node = Neo4j::Node.load(node_id)
 
     if @node.present? and check_node_label(@node)
-      relations = @node.rels(dir: :both)
+      outgoing_relations = @node.rels(dir: :outgoing)
+      incoming_relations = @node.rels(dir: :incoming)
       @data_collections = {}
       @data_collections[:nodes] = []
       @data_collections[:edges] = []
       @check_node = []
-      
-      relations.each do |relation|   
-         relation_resource = relation.load_resource                
-         e_node = relation.end_node
-         e_node_id = relation.end_node.neo_id
-         e_node_label = e_node.labels[0]
-         s_node = relation.start_node
-         s_node_id = relation.start_node.neo_id
-         edge_properties = relation.props       
-         edge_relation = relation_resource.present? ? relation_resource["type"] : ""      
-         color_prop = relation.end_node.props[:color].present? ? relation.end_node.props[:color] : '#666'
-         if e_node_label.present? and check_node_label(e_node)
-           unless @check_node.include? e_node_id
-             @check_node << e_node_id
-             @data_collections[:nodes] << create_node(node: e_node, relation: edge_relation, label: e_node_label, color: color_prop, url: "/assets/img/img3.png")
-           end
-           @data_collections[:edges] << create_edge(source: s_node, target: e_node, relation: relation, color: '#ccc', relation_name: edge_relation)
-         end
-      end
+      check_node = []
+      get_relation_data(@node, @data_collections, outgoing_relations, @check_node, check_node )
+      get_relation_data_incoming(@node, @data_collections, incoming_relations, [], check_node )
+      # relations.each do |relation|   
+      #    relation_resource = relation.load_resource                
+      #    e_node = relation.end_node
+      #    e_node_id = relation.end_node.neo_id
+      #    e_node_label = e_node.labels[0]
+      #    s_node = relation.start_node
+      #    s_node_id = relation.start_node.neo_id
+      #    s_node_label = s_node.labels[0]
+      #    edge_properties = relation.props       
+      #    edge_relation = relation_resource.present? ? relation_resource["type"] : ""      
+      #    color_prop = relation.end_node.props[:color].present? ? relation.end_node.props[:color] : '#666'
+      #    if e_node_label.present? and check_node_label(e_node)
+      #      unless @check_node.include? e_node_id
+      #        @check_node << e_node_id
+      #        @data_collections[:nodes] << create_node(node: e_node, relation: edge_relation, label: e_node_label, color: color_prop, url: "/assets/img/img3.png")
+            
+      #      end
+      #      @data_collections[:edges] << create_edge(source: s_node, target: e_node, relation: relation, color: '#ccc', relation_name: edge_relation)
+      #    end
+      # end
+
+      # @check_node = []
+      # inc_relations = @node.rels(dir: :incoming)
+      # inc_relations.each do |relation|   
+      #    relation_resource = relation.load_resource                
+      #    e_node = relation.end_node
+      #    e_node_id = relation.end_node.neo_id
+      #    e_node_label = e_node.labels[0]
+      #    s_node = relation.start_node
+      #    s_node_id = relation.start_node.neo_id
+      #    s_node_label = s_node.labels[0]
+      #    edge_properties = relation.props       
+      #    edge_relation = relation_resource.present? ? relation_resource["type"] : ""      
+      #    color_prop = relation.end_node.props[:color].present? ? relation.end_node.props[:color] : '#666'
+      #    # binding.pry
+      #    if s_node_label.present? and check_node_label(s_node)
+      #      unless @check_node.include? s_node_id
+      #        @check_node << s_node_id
+      #        @data_collections[:nodes] << create_node(node: s_node, relation: edge_relation, label: s_node_label, color: color_prop, url: "/assets/img/img3.png")
+            
+      #      end
+      #      @data_collections[:edges] << create_edge(source: s_node, target: e_node, relation: relation, color: '#ccc', relation_name: edge_relation)
+      #    end
+      # end
 
       # @providers[:edges] << create_edge(source: current_user, target: @identity, relation: @identity.rels(type: 'User#identities')[0], color: '#ccc')
       @data_collections[:nodes] << create_node(node: @node, label: @node.labels[0], color: @node.props[:color], url: "/assets/img/img2.png") 
@@ -51,48 +80,70 @@ class UsersController < ApplicationController
     node = Neo4j::Node.load(params[:id])
     check_end_node = params[:node_ids].split(',').map { |s| s.to_i }
     @data_collections = {}
-    relations = node.rels(dir: :outgoing)
+    outgoing_relations = node.rels(dir: :outgoing)
+    incoming_relations = node.rels(dir: :incoming)
     @data_collections[:nodes] = []
     @data_collections[:edges] = []
     # check_end_node = []  
     check_node = []
-    get_relation_data(node, @data_collections, relations, check_end_node, check_node )
+    get_relation_data(node, @data_collections, outgoing_relations, check_end_node, check_node)
+    get_relation_data_incoming(node, @data_collections, incoming_relations, check_end_node, check_node)
     respond_to do |format|
       format.json {render json: [@data_collections, check_end_node]}
     end
   end
   
 
-  def get_relation_data(node, data_collections, relations, check_end_node, check_node )
+  def get_relation_data(node, data_collections, relations, check_end_node, check_node=[] )
     relations.each do |relation|
 
        edge_resource = relation.load_resource
        e_node = relation.end_node
        e_node_id = relation.end_node.neo_id
+       e_node_label = e_node.labels[0]
        s_node = relation.start_node
        s_node_id = relation.start_node.neo_id
+       s_node_label = s_node.labels[0]
+       edge_properties = relation.props
+       edge_relation = edge_resource.present? ? edge_resource["type"] : ""
+       color_prop = relation.end_node.props[:color].present? ? relation.end_node.props[:color] : '#666'
+       if s_node_label.present? and check_node_label(s_node)
+         unless check_end_node.include? e_node_id
+           check_end_node << e_node_id
+           data_collections[:nodes] << create_node(node: e_node, relation: edge_relation, label: e_node.labels[0].to_s, color: color_prop)
+   
+         end 
+        end
+
+       data_collections[:edges] << create_edge(source: s_node, target: e_node, relation: relation, color: '#ccc', relation_name: edge_relation)
+    end
+  
+  end
+
+  def get_relation_data_incoming(node, data_collections, relations, check_end_node, check_node )
+    relations.each do |relation|
+
+       edge_resource = relation.load_resource
+       e_node = relation.end_node
+       e_node_id = relation.end_node.neo_id
+       e_node_label = e_node.labels[0]
+       s_node = relation.start_node
+       s_node_id = relation.start_node.neo_id
+       s_node_label = s_node.labels[0]
        edge_properties = relation.props
        edge_relation = edge_resource.present? ? edge_resource["type"] : ""
        color_prop = relation.end_node.props[:color].present? ? relation.end_node.props[:color] : '#666'
 
-       unless check_end_node.include? e_node_id
-         check_end_node << e_node_id
-         data_collections[:nodes] << create_node(node: e_node, relation: edge_relation, label: e_node.labels[0].to_s, color: color_prop)
-        
-
-
-         # end_node_rels = e_node.rels(dir: :outgoing)
-         # if end_node_rels.present?
-         #    get_relation_data(e_node, data_collections, end_node_rels, check_end_node, check_node )
-         # end
-       end 
-
-       data_collections[:edges] << create_edge(source: s_node, target: e_node, relation: relation, color: '#ccc', relation_name: edge_relation)
+       if s_node_label.present? and check_node_label(s_node)
+           unless check_end_node.include? s_node_id
+             @check_node << s_node_id
+             @data_collections[:nodes] << create_node(node: s_node, relation: edge_relation, label: s_node_label, color: color_prop, url: "/assets/img/img3.png")
+            
+           end
+           @data_collections[:edges] << create_edge(source: s_node, target: e_node, relation: relation, color: '#ccc', relation_name: edge_relation)
+        end
     end
-    # unless check_node.include? node and check_end_node.include? node
-    #   check_node << node.neo_id
-      # data_collections[:nodes] << create_node(node: node, label: node.labels[0].to_s, color: '#00FF00')
-    # end
+  
   end
 
 

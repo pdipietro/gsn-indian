@@ -395,8 +395,8 @@
     if (typeof edge.target !== 'string' || !this.nodesIndex[edge.target])
       throw 'The edge target must have an existing node id.';
 
-    if (this.edgesIndex[edge.id])
-      throw 'The edge "' + edge.id + '" already exists.';
+    // if (this.edgesIndex[edge.id])
+    //   throw 'The edge "' + edge.id + '" already exists.';
 
     var k,
         validEdge = Object.create(null);
