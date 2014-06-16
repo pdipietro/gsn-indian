@@ -81,6 +81,58 @@ module CustomNodeRelationship
     !(node.labels[0].blank? and node.neo_id.to_i <=1000)
   end
 
+  def get_relation_data(node, data_collections, relations, check_end_node, check_node=[] )
+    relations.each do |relation|
+
+       edge_resource = relation.load_resource
+       e_node = relation.end_node
+       e_node_id = relation.end_node.neo_id
+       e_node_label = e_node.labels[0]
+       s_node = relation.start_node
+       s_node_id = relation.start_node.neo_id
+       s_node_label = s_node.labels[0]
+       edge_properties = relation.props
+       edge_relation = edge_resource.present? ? edge_resource["type"] : ""
+       color_prop = relation.end_node.props[:color].present? ? relation.end_node.props[:color] : '#666'
+       if s_node_label.present? and check_node_label(s_node)
+         unless check_end_node.include? e_node_id
+           check_end_node << e_node_id
+           data_collections[:nodes] << create_node(node: e_node, relation: edge_relation, label: e_node.labels[0].to_s, color: color_prop)
+   
+         end 
+        end
+
+       data_collections[:edges] << create_edge(source: s_node, target: e_node, relation: relation, color: '#ccc', relation_name: edge_relation)
+    end
+  
+  end
+
+  def get_relation_data_incoming(node, data_collections, relations, check_end_node, check_node )
+    relations.each do |relation|
+
+       edge_resource = relation.load_resource
+       e_node = relation.end_node
+       e_node_id = relation.end_node.neo_id
+       e_node_label = e_node.labels[0]
+       s_node = relation.start_node
+       s_node_id = relation.start_node.neo_id
+       s_node_label = s_node.labels[0]
+       edge_properties = relation.props
+       edge_relation = edge_resource.present? ? edge_resource["type"] : ""
+       color_prop = relation.end_node.props[:color].present? ? relation.end_node.props[:color] : '#666'
+
+       if s_node_label.present? and check_node_label(s_node)
+           unless check_end_node.include? s_node_id
+             @check_node << s_node_id
+             @data_collections[:nodes] << create_node(node: s_node, relation: edge_relation, label: s_node_label, color: color_prop, url: "/assets/img/img3.png")
+            
+           end
+           @data_collections[:edges] << create_edge(source: s_node, target: e_node, relation: relation, color: '#ccc', relation_name: edge_relation)
+        end
+    end
+  
+  end
+
 
 
 end
