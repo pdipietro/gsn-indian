@@ -3,7 +3,7 @@ require 'spec_helper'
 # include Capybara::DSL
 def sign_in(identity, provider)
   visit signin_path
-  fill_in "Email",    with: identity.email
+  fill_in "Email address",    with: identity.email
   fill_in "Password", with: "foobar"
   click_button "Sign in"
   # Sign in when not using Capybara.

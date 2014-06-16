@@ -47,12 +47,12 @@ describe UserIdentity do
     it { should be_invalid }
   end
 
-  describe "identity associations" do
-    it "should have many providers" do      
-      identity.providers.should be_a_kind_of(Array)
-      identity.providers.should_not be_empty
-    end
-  end
+  # describe "identity associations" do
+  #   it "should have many providers" do      
+  #     identity.providers.should be_a_kind_of(Array)
+  #     identity.providers.should_not be_empty
+  #   end
+  # end
 
 
   describe "password " do

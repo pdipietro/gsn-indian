@@ -17,10 +17,10 @@ describe NodeAttribute do
      it { should_not be_valid }
  end 
 
- describe "has one creator" do
+ describe "has one is_owned_by" do
        create_user_identity
     node_attribute = NodeAttribute.create(name: Faker::Name.first_name, attr_type: "DataType")
-    node_attribute.creator = @user
-       it { node_attribute.creator.should_not be_nil }
+    node_attribute.is_owned_by = @user
+       it { node_attribute.is_owned_by.should_not be_nil }
  end
 end

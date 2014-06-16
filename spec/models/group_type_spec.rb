@@ -12,9 +12,9 @@ describe GroupType do
         group_type.node_types << name_node_type
         group_type.node_types << desc_node_type
 
-        group_type.creator = @user
+        group_type.is_owned_by = @user
 
-        it { group_type.creator.should_not be_nil }
+        it { group_type.is_owned_by.should_not be_nil }
 
         it { group_type.node_types.count.should > 1 }
     end

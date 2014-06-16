@@ -14,7 +14,8 @@ describe "static_pages/home.html.erb" do
 
 	    it "should render the user's page " do
 		    render
-		    page.should render_template("shared/_user_info")
+		    page.should render_template("shared/_search_node")
+		    page.should render_template("shared/_header_profile_modal")
 	    end
     end
 
@@ -24,11 +25,10 @@ describe "static_pages/home.html.erb" do
 		  sign_in(@identity, 'normal')
 		  visit signout_path
     	end
-	    it { page.should have_selector('h1', text: 'Sample App') }
-	    it { page.should have_selector('h2', text: 'home page') }
-	    it { page.should have_selector( 'img[alt="Rails"]' ) }
-	    it { page.should have_link( 'Ruby on Rails Tutorial', href: "http://railstutorial.org/") }
-	    it { page.should have_link( 'Sign up now!', href: signup_path) }	
+	    # it { page.should have_selector('h1', text: 'Sample App') }
+	    # it { page.should have_selector('h2', text: 'home page') }	    
+	    it { page.should have_link( 'GSN', href: root_path) }
+	    it { page.should have_link( 'Sign up', href: signup_path) }	
     end
   end
 end

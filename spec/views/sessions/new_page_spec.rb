@@ -5,15 +5,15 @@ describe "sessions/new.html.erb" do
     	before { visit signin_path }      
 
         it "signs users in" do
-		    fill_in "Email", :with => UserIdentity.last.email
+		    fill_in "Email address", :with => UserIdentity.last.email
 		    fill_in "Password", :with => "foobar"
 		    click_button "Sign in"
 
 		    # page.should have_content('Signed in successfully')
 		end
 
-		it { page.should have_link('Sign up now!', href: signup_path) }
-		it { page.should have_selector('p', text: "user?") }
+		it { page.should have_link('Sign up', href: signup_path) }
+		
   	end
 
   	# describe "Oauth" do

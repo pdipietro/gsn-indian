@@ -30,8 +30,7 @@ class UserIdentity
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   validates :email, presence: true, format: { with: VALID_EMAIL_REGEX }
   validate :email_uniqueness
-  validates :password, length: { minimum: 6 },
-                               if: :is_normal_provider?
+  validates :password, length: { minimum: 6 }, if: :is_normal_provider?
   validates_confirmation_of :password,
                           if: lambda { |m| m.password.present? }
   index :email
@@ -40,7 +39,7 @@ class UserIdentity
 
   before_save { self.email = email.downcase }
   before_save :secure_password
-
+  
   # before_create :create_remember_token
   before_create :set_nickname
   before_create :create_confirmation_token, if: :is_normal_provider?
@@ -83,8 +82,8 @@ class UserIdentity
   end
 
 
-  def secure_password
-    if password_changed? or new_record?
+  def secure_password    
+    if (password_changed? or new_record?)
       self.password = UserIdentity.encrypt_password(email, password) 
     end
   end

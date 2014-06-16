@@ -12,29 +12,38 @@ class UsersController < ApplicationController
   def show
     node_id = params[:id].present? ? params[:id] : params[:search_node]
     @node = Neo4j::Node.load(node_id)
-    relations = @node.rels(dir: :outgoing)
-    @data_collections = {}
-    @data_collections[:nodes] = []
-    @data_collections[:edges] = []
-    @check_node = []
-    relations.each do |relation|   
-       relation_resource = relation.load_resource                
-       e_node = relation.end_node
-       e_node_id = relation.end_node.neo_id
-       s_node = relation.start_node
-       s_node_id = relation.start_node.neo_id
-       edge_properties = relation.props       
-       edge_relation = relation_resource.present? ? relation_resource["type"] : ""      
-       color_prop = relation.end_node.props[:color].present? ? relation.end_node.props[:color] : '#666'
-       unless @check_node.include? e_node_id
-         @check_node << e_node_id
-         @data_collections[:nodes] << create_node(node: e_node, relation: edge_relation, label: e_node.labels[0], color: color_prop, url: "/assets/img/img3.png")
-       end
-       @data_collections[:edges] << create_edge(source: s_node, target: e_node, relation: relation, color: '#ccc', relation_name: edge_relation)
-    end
 
-    # @providers[:edges] << create_edge(source: current_user, target: @identity, relation: @identity.rels(type: 'User#identities')[0], color: '#ccc')
-    @data_collections[:nodes] << create_node(node: @node, label: @node.labels[0], color: @node.props[:color], url: "/assets/img/img2.png") 
+    if @node.present? and check_node_label(@node)
+      relations = @node.rels(dir: :both)
+      @data_collections = {}
+      @data_collections[:nodes] = []
+      @data_collections[:edges] = []
+      @check_node = []
+      
+      relations.each do |relation|   
+         relation_resource = relation.load_resource                
+         e_node = relation.end_node
+         e_node_id = relation.end_node.neo_id
+         e_node_label = e_node.labels[0]
+         s_node = relation.start_node
+         s_node_id = relation.start_node.neo_id
+         edge_properties = relation.props       
+         edge_relation = relation_resource.present? ? relation_resource["type"] : ""      
+         color_prop = relation.end_node.props[:color].present? ? relation.end_node.props[:color] : '#666'
+         if e_node_label.present? and check_node_label(e_node)
+           unless @check_node.include? e_node_id
+             @check_node << e_node_id
+             @data_collections[:nodes] << create_node(node: e_node, relation: edge_relation, label: e_node_label, color: color_prop, url: "/assets/img/img3.png")
+           end
+           @data_collections[:edges] << create_edge(source: s_node, target: e_node, relation: relation, color: '#ccc', relation_name: edge_relation)
+         end
+      end
+
+      # @providers[:edges] << create_edge(source: current_user, target: @identity, relation: @identity.rels(type: 'User#identities')[0], color: '#ccc')
+      @data_collections[:nodes] << create_node(node: @node, label: @node.labels[0], color: @node.props[:color], url: "/assets/img/img2.png") 
+    else
+      @error_message= "Node not found."
+    end
   end
 
 

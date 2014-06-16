@@ -15,16 +15,16 @@ describe UsersController do
     end
   end
 
-  describe 'GET #show' do
-    before do
-      @identity = UserIdentity.last
-      user_sign_in(@identity)
-    end
-    it "should show the user" do
-      get :show, id: @user.id
-      assigns(:user).should == @user
-    end
- 	end
+  # describe 'GET #show' do
+  #   before do
+  #     @identity = UserIdentity.last
+  #     user_sign_in(@identity)
+  #   end
+  #   it "should show the user" do
+  #     get :show, id: @user.id
+  #     assigns(:user).should == @user
+  #   end
+ 	# end
 
  	describe 'GET #new' do
 	  let(:get_new) { get :new }

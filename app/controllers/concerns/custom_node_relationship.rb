@@ -6,7 +6,7 @@ module CustomNodeRelationship
         node     = options[:node]
         relation = options[:relation]
         label    = options[:label]
-        color    = options[:color]
+        color    = options[:color].present? ? options[:color] : "#C0C0C0"
         image_url = "/assets/icon/crowdup/#{label.try(:downcase)}.png"        
         check_url =  "#{Rails.root}/app/assets/images/icon/crowdup/#{label.try(:downcase)}.png"  
         prop_name = word_underscore(node.props[:name])
@@ -40,7 +40,7 @@ module CustomNodeRelationship
        	           x:          Random.rand(1-6664664646),
        	           y:          Random.rand(1-6664664646),
        	           size:       Random.rand(1-6664664646),
-       	           color:      "#C0C0C0",
+       	           color:      color,
                    type:       "image",
                    url:        url,
        	           properties: {
@@ -75,6 +75,10 @@ module CustomNodeRelationship
   def word_underscore(word)
     word.gsub(" ", '_').downcase  if word.present?
     # word.scan(/[A-Z][a-z]*/).join("_").downcase if word.present?
+  end
+
+  def check_node_label(node)
+    !(node.labels[0].blank? and node.neo_id.to_i <=1000)
   end
 
 
