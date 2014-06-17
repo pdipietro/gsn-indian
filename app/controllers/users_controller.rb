@@ -23,6 +23,7 @@ class UsersController < ApplicationController
       check_node = []
       get_relation_data(@node, @data_collections, outgoing_relations, @check_node, check_node )
       get_relation_data_incoming(@node, @data_collections, incoming_relations, [], check_node )
+
       # relations.each do |relation|   
       #    relation_resource = relation.load_resource                
       #    e_node = relation.end_node

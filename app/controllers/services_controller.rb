@@ -21,12 +21,11 @@ class ServicesController < ApplicationController
       end
       flash[:notice] = "Signed in successfully with #{provider}"      
       if identity.user == current_user
-        redirect_to identity
+        redirect_to user_path(identity.user)
       else
         redirect_to root_path
       end
-    else
-      
+    else      
       redirect_to root_path, :flash => { :error => show_error_messages(identity) }
     end          
   end
@@ -66,15 +65,15 @@ class ServicesController < ApplicationController
       return identity  
     end
 
-     def sign_in_user(identity, provider)
-    remember_token = UserIdentity.new_random_token
-    cookies.permanent[:remember_token] = remember_token
-    identity.update(remember_token: UserIdentity.hash(remember_token))
-    # identity = identity.get_identity(provider)
+    def sign_in_user(identity, provider)
+      remember_token = UserIdentity.new_random_token
+      cookies.permanent[:remember_token] = remember_token
+      identity.update(remember_token: UserIdentity.hash(remember_token))
+      # identity = identity.get_identity(provider)
 
-    self.current_identity = identity
-    self.current_user = identity.user
-    flash[:notice] = "Signed in successfully"
-  end
+      self.current_identity = identity
+      self.current_user = identity.user
+      flash[:notice] = "Signed in successfully"
+    end
 
 end

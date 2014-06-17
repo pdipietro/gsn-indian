@@ -123,6 +123,7 @@ class UserIdentity
 
   def identity_provider(provider, uid="", oauth_token="", oauth_expires_at="")
     relation = get_relation(provider)
+   
     if relation.blank?
       create_provider_identity(provider, uid, oauth_token, oauth_expires_at)
 

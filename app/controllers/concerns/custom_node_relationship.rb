@@ -123,7 +123,7 @@ module CustomNodeRelationship
 
        if s_node_label.present? and check_node_label(s_node)
            unless check_end_node.include? s_node_id
-             @check_node << s_node_id
+             check_end_node << s_node_id
              @data_collections[:nodes] << create_node(node: s_node, relation: edge_relation, label: s_node_label, color: color_prop, url: "/assets/img/img3.png")
             
            end

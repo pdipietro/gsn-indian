@@ -10,7 +10,7 @@ class SessionsController < ApplicationController
     if identity && UserIdentity.encrypt_password(identity.email, params[:session][:password]) == identity.password
       # Sign the user in and redirect to the user's show page.
       sign_in_user(identity, "normal")
-      redirect_to identity
+      redirect_to user_path(identity.user)
     else
       # Create an error message and re-render the signin form.
       flash.now[:error] = 'Invalid email/password combination' # Not quite right!
@@ -30,7 +30,7 @@ class SessionsController < ApplicationController
       identity.confirmation_token = ""
       identity.save
       sign_in(identity, "normal")
-      redirect_to identity
+      redirect_to user_path(identity.user)
     else
       redirect_to root_path, notice: "Token is invalid"
     end
