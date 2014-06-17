@@ -41,7 +41,7 @@ module CustomNodeRelationship
         end
 
         label_html = prop_name.present? ? "#{prop_name.try(:humanize)}" : "#{label}"
-       
+        label_html = "#{label_html} [#{node.neo_id}]"
         {
                    id:         node.neo_id.to_s,  
                    label:      label_html, 
