@@ -1,8 +1,8 @@
 module CustomNodeRelationship
 
-	 extend ActiveSupport::Concern
+   extend ActiveSupport::Concern
 
-	 def create_node(options = {})	 
+   def create_node(options = {})   
         node     = options[:node]
         relation = options[:relation]
         label    = options[:label]
@@ -26,51 +26,49 @@ module CustomNodeRelationship
         url    = default_url
         relation_name = []
         relation_id = []
-
+        relation_info = []
         node.rels.each do |rel|
-          relation_name << rel.load_resource['type']
-          relation_id <<  "Relation #{rel.neo_id}"
+          relation_type = rel.load_resource['type']
+          relation_info << "#{rel.start_node.labels[0]} -> #{relation_type} -> #{rel.end_node.labels[0]}"          
+         
         end
 
         label_html = prop_name.present? ? "#{prop_name.try(:humanize)}" : "#{label}"
        
-	 	    {
-       	           id:         node.neo_id.to_s,  
-       	           label:      label_html, 
-       	           x:          Random.rand(1-6664664646),
-       	           y:          Random.rand(1-6664664646),
-       	           size:       Random.rand(1-6664664646),
-       	           color:      color,
+        {
+                   id:         node.neo_id.to_s,  
+                   label:      label_html, 
+                   x:          Random.rand(1-6664664646),
+                   y:          Random.rand(1-6664664646),
+                   size:       Random.rand(1-6664664646),
+                   color:      color,
                    type:       "image",
                    url:        url,
-       	           properties: {
-       	           	node:         node.props,
-       	           	edge:         {
-                        relation_name: relation_name,
-                        relation_id: relation_id
-                    }
-       	                       },
-       	           relation:   relation
+                   properties: {
+                    node:         node.props,
+                    edge:         relation_info
+                               },
+                   relation:   relation
         }
 
-	 end
+   end
 
-	 def create_edge(options = {})
+   def create_edge(options = {})
       source           = options[:source]
       target           = options[:target]
       relation         = options[:relation]
       color            = options[:color]         
       relation_name    = options[:relation_name].try(:capitalize) 
       {
-				    id: "#{relation.neo_id}",
-				    source: source.neo_id.to_s,
-				    target: target.neo_id.to_s,
-				    size:   1000,
-				    color:  color,
+            id: "#{relation.neo_id}",
+            source: source.neo_id.to_s,
+            target: target.neo_id.to_s,
+            size:   1000,
+            color:  color,
             type: "arrow",
             relation_name: relation_name
       }
-	 end
+   end
 
   def word_underscore(word)
     word.gsub(" ", '_').downcase  if word.present?
@@ -107,7 +105,7 @@ module CustomNodeRelationship
   
   end
 
-  def get_relation_data_incoming(node, data_collections, relations, check_end_node, check_node )
+  def get_relation_data_incoming(node, data_collections, relations, check_end_node, check_node)
     relations.each do |relation|
 
        edge_resource = relation.load_resource
@@ -129,8 +127,7 @@ module CustomNodeRelationship
            end
            @data_collections[:edges] << create_edge(source: s_node, target: e_node, relation: relation, color: '#ccc', relation_name: edge_relation)
         end
-    end
-  
+    end  
   end
 
 

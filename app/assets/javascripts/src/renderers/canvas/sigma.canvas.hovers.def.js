@@ -26,7 +26,7 @@
         fontSize = (settings('labelSize') === 'fixed') ?
           settings('defaultLabelSize') :
           settings('labelSizeRatio') * size;
-     
+    
      // Node properties
      var node_prop = ''
       $.each(node.properties.node, function(property, value) {   
@@ -34,6 +34,14 @@
         ':</span><span>'+value+'</span></li>'
       });
 
+      var edge_prop = ''
+       $.each(node.properties.edge, function(property, value) {   
+        value = value.replace(/-u003E/g, "->");
+        edge_prop += '<li>'+value+'</li>'
+        
+        // edge_prop += '<li><span style="color:red; margin-right: 20px; list-style: none">'+(property)+
+        // ':</span><span>'+value+'</span></li>'
+      });
 
     // Label background:
     context.font = (fontStyle ? fontStyle + ' ' : '') +
@@ -131,6 +139,8 @@
                   // '<img src="http://localhost:3000/assets/img/img1.png" height="50" width="50" alt="img1"/>'+
                   '<span style="color:black; font-size: 18px">'+ node.label + '</span>'+
                   '<div id="modal_body_content" class="span10">'+ node_prop +'</div>'+
+                  '<span style="color:black; font-size: 14px">Relationships</span>'+
+                  '<div class="span10">'+ edge_prop +'</div>'+
                   '</div>' +
                '</foreignObject>' +
              '</svg>';
