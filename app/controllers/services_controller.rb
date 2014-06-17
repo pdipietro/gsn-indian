@@ -19,7 +19,7 @@ class ServicesController < ApplicationController
       unless signed_in?  
         sign_in_user(identity, provider)
       end
-      flash[:notice] = "Signed in successfully with #{provider}"      
+      flash[:success] = "Signed in successfully with #{provider}"      
       if identity.user == current_user
         redirect_to user_path(identity.user)
       else
@@ -73,7 +73,7 @@ class ServicesController < ApplicationController
 
       self.current_identity = identity
       self.current_user = identity.user
-      flash[:notice] = "Signed in successfully"
+      flash[:success] = "Signed in successfully"
     end
 
 end

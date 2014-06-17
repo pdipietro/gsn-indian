@@ -324,8 +324,9 @@
       throw 'The node must have a string id.';
 
     if (this.nodesIndex[node.id])
-    {      
-      alert('The node "' + node.id + '" already exists.');
+    {
+      show_error_message("The node " + node.id + " already exists.")       
+     
     }
       // throw 'The node "' + node.id + '" already exists.';
 

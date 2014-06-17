@@ -338,7 +338,8 @@ $(document).on("click", "#reset_node", function() {
 $(document).on("click", "#add_relation_node", function() {
    get_node_ele();
    if(first_node_id == second_node_id){
-     alert("Start and End node will not be same")
+    show_error_message("Start and End node will not be same");
+     
    }
    else{   
 

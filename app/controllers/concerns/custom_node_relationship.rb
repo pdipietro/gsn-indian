@@ -27,8 +27,15 @@ module CustomNodeRelationship
         relation_name = []
         relation_id = []
         relation_info = []
+         Rails.logger.debug node.inspect
+         Rails.logger.debug "LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL"
         node.rels.each do |rel|
           relation_type = rel.load_resource['type']
+          # binding.pry
+          Rails.logger.debug rel.inspect
+          Rails.logger.debug rel.neo_id
+          Rails.logger.debug "::::::::::::::::::::::::::::::::::::::::"
+          Rails.logger.debug "#{rel.start_node.labels[0]} -> #{relation_type} -> #{rel.end_node.labels[0]}"
           relation_info << "#{rel.start_node.labels[0]} -> #{relation_type} -> #{rel.end_node.labels[0]}"          
          
         end

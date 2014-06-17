@@ -1,6 +1,7 @@
 $("#graph-container").html("")
 <% if @error_message.present? %>
-  alert("<%= @error_message %>")
+  show_error_message("<%= @error_message %>");
+  
 <% else %>
 	graph_data = JSON.parse('<%= raw [@data_collections.to_json][0] %>');
 	var node_ids=[]

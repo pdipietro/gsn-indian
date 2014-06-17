@@ -32,7 +32,7 @@ class SessionsController < ApplicationController
       sign_in(identity, "normal")
       redirect_to user_path(identity.user)
     else
-      redirect_to root_path, notice: "Token is invalid"
+      redirect_to root_path, error: "Token is invalid"
     end
   end
 
@@ -52,6 +52,6 @@ class SessionsController < ApplicationController
 
     self.current_identity = identity
     self.current_user = identity.user
-    flash[:notice] = "Signed in successfully"
+    flash[:success] = "Signed in successfully"
   end
 end

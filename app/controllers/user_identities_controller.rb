@@ -79,7 +79,7 @@ class UserIdentitiesController < ApplicationController
         # @identity.user = user
         @identity.identity_provider("normal")
 
-        flash[:notice] = signed_in? ? "Identity successfully created" : "Please verify your email"        
+        flash[:success] = signed_in? ? "Identity successfully created" : "Please verify your email"        
         redirect_to @identity
       else
         render 'new'
