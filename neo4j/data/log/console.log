@@ -171,3 +171,16 @@ Caused by: org.neo4j.server.preflight.PreflightFailedException: Startup failed d
 2014-05-18 08:48:51.201+0000 INFO  [API] Available console sessions: SHELL: class org.neo4j.server.webadmin.console.ShellSessionCreator
 CYPHER: class org.neo4j.server.webadmin.console.CypherSessionCreator
 
+2014-06-20 15:30:09.423+0000 INFO  [API] Setting startup timeout to: 120000ms based on -1
+2014-06-20 15:30:09.490+0000 DEBUG [API] Recovery startup task failed.
+2014-06-20 15:30:09.491+0000 DEBUG [API] Unable to recover database
+2014-06-20 15:30:09.497+0000 DEBUG [API] 
+org.neo4j.server.ServerStartupException: Starting Neo4j Server failed: Startup failed due to preflight task [class org.neo4j.server.preflight.PerformRecoveryIfNecessary]: Unable to recover database
+	at org.neo4j.server.AbstractNeoServer.start(AbstractNeoServer.java:209) ~[neo4j-server-2.0.0.jar:2.0.0]
+	at org.neo4j.server.Bootstrapper.start(Bootstrapper.java:87) [neo4j-server-2.0.0.jar:2.0.0]
+	at org.neo4j.server.Bootstrapper.main(Bootstrapper.java:50) [neo4j-server-2.0.0.jar:2.0.0]
+Caused by: org.neo4j.server.preflight.PreflightFailedException: Startup failed due to preflight task [class org.neo4j.server.preflight.PerformRecoveryIfNecessary]: Unable to recover database
+	at org.neo4j.server.AbstractNeoServer.runPreflightTasks(AbstractNeoServer.java:321) ~[neo4j-server-2.0.0.jar:2.0.0]
+	at org.neo4j.server.AbstractNeoServer.start(AbstractNeoServer.java:144) ~[neo4j-server-2.0.0.jar:2.0.0]
+	... 2 common frames omitted
+2014-06-20 15:30:09.498+0000 DEBUG [API] Failed to start Neo Server on port [7474]

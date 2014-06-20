@@ -216,3 +216,22 @@ May 18, 2014 10:48:51 AM org.neo4j.server.logging.Logger log
 INFO: Available console sessions: SHELL: class org.neo4j.server.webadmin.console.ShellSessionCreator
 CYPHER: class org.neo4j.server.webadmin.console.CypherSessionCreator
 
+Jun 20, 2014 5:30:09 PM org.neo4j.server.logging.Logger log
+INFO: Setting startup timeout to: 120000ms based on -1
+Jun 20, 2014 5:30:09 PM org.neo4j.server.logging.Logger log
+SEVERE: Recovery startup task failed.
+Jun 20, 2014 5:30:09 PM org.neo4j.server.logging.Logger log
+SEVERE: Unable to recover database
+Jun 20, 2014 5:30:09 PM org.neo4j.server.logging.Logger log
+SEVERE: 
+org.neo4j.server.ServerStartupException: Starting Neo4j Server failed: Startup failed due to preflight task [class org.neo4j.server.preflight.PerformRecoveryIfNecessary]: Unable to recover database
+	at org.neo4j.server.AbstractNeoServer.start(AbstractNeoServer.java:209)
+	at org.neo4j.server.Bootstrapper.start(Bootstrapper.java:87)
+	at org.neo4j.server.Bootstrapper.main(Bootstrapper.java:50)
+Caused by: org.neo4j.server.preflight.PreflightFailedException: Startup failed due to preflight task [class org.neo4j.server.preflight.PerformRecoveryIfNecessary]: Unable to recover database
+	at org.neo4j.server.AbstractNeoServer.runPreflightTasks(AbstractNeoServer.java:321)
+	at org.neo4j.server.AbstractNeoServer.start(AbstractNeoServer.java:144)
+	... 2 more
+
+Jun 20, 2014 5:30:09 PM org.neo4j.server.logging.Logger log
+SEVERE: Failed to start Neo Server on port [7474]
