@@ -105,7 +105,7 @@ module CustomNodeRelationship
            data_collections[:nodes] << create_node(node: e_node, relation: edge_relation, label: e_node.labels[0].to_s, color: color_prop)
    
          end 
-        end
+       end
 
        data_collections[:edges] << create_edge(source: s_node, target: e_node, relation: relation, color: '#ccc', relation_name: edge_relation)
     end

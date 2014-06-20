@@ -123,7 +123,7 @@ class UserIdentity
 
   def identity_provider(provider, uid="", oauth_token="", oauth_expires_at="")
     relation = get_relation(provider)
-   
+     
     if relation.blank?
       create_provider_identity(provider, uid, oauth_token, oauth_expires_at)
 
@@ -139,10 +139,9 @@ class UserIdentity
   end
 
   def get_relation(provider)
-    provider_relations = self.rels(type: :provider)
-
+    provider_relations = self.rels(type: :has_provider)    
     relation = nil
-    provider_relations.map do |pr|      
+    provider_relations.map do |pr|          
       if(pr.get_property("name") == provider)
         relation = pr
       end

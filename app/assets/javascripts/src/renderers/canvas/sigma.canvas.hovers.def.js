@@ -131,9 +131,9 @@
       //          '</foreignObject>' +
       //        '</svg>';
 
-            var data   = '<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300">' +
+            var data   = '<svg xmlns="http://www.w3.org/2000/svg" width="300" height="500">' +
                // '<image x="200" y="200" width="300" height="80" xlink:href="http://jenkov.com/images/layout/top-bar-logo.png" />' +
-               '<foreignObject width="300" height="300">' +
+               '<foreignObject width="300" height="500">' +
                 '<div xmlns="http://www.w3.org/1999/xhtml" style="font-size:12px; background-color: white; border: 1px solid #bbb">' +
                 // '<image xlink:href="http://localhost:3000/assets/img/img1.png" height="20px" width="20px"/>'+
                   // '<img src="http://localhost:3000/assets/img/img1.png" height="50" width="50" alt="img1"/>'+

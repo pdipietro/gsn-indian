@@ -86,9 +86,11 @@ class UserIdentitiesController < ApplicationController
       end
     else
       relation =  @exist_identity.identity_provider("normal")
+
       if relation == :error_messsage
-        flash[:error] = "Identity already created"      
-        redirect_to root_path
+        @identity = @exist_identity
+        flash[:danger] = "Identity already created"      
+        render 'new'
       end
     end
   end
