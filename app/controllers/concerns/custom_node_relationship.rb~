@@ -84,9 +84,9 @@ module CustomNodeRelationship
     # word.scan(/[A-Z][a-z]*/).join("_").downcase if word.present?
   end
 
-#  def check_node_label(node)
-#    !(node.labels[0].blank? and node.neo_id.to_i <=1000)
-#  end
+  def check_node_label(node)
+    !(node.labels[0].blank? and node.neo_id.to_i <=1000)
+  end
 
   def get_relation_data(node, data_collections, relations, check_end_node, check_node=[] )
     relations.each do |relation|
@@ -101,13 +101,13 @@ module CustomNodeRelationship
        edge_properties = relation.props
        edge_relation = edge_resource.present? ? edge_resource["type"] : ""
        color_prop = relation.end_node.props[:color].present? ? relation.end_node.props[:color] : '#666'
-#       if s_node_label.present? and check_node_label(s_node)
+       if s_node_label.present? and check_node_label(s_node)
          unless check_end_node.include? e_node_id
            check_end_node << e_node_id
            data_collections[:nodes] << create_node(node: e_node, relation: edge_relation, label: e_node.labels[0].to_s, color: color_prop)
    
          end 
-#       end
+       end
 
        data_collections[:edges] << create_edge(source: s_node, target: e_node, relation: relation, color: '#ccc', relation_name: edge_relation)
     end
@@ -128,14 +128,14 @@ module CustomNodeRelationship
        edge_relation = edge_resource.present? ? edge_resource["type"] : ""
        color_prop = relation.end_node.props[:color].present? ? relation.end_node.props[:color] : '#666'
 
-#       if s_node_label.present? and check_node_label(s_node)
+       if s_node_label.present? and check_node_label(s_node)
            unless check_end_node.include? s_node_id
              check_end_node << s_node_id
              @data_collections[:nodes] << create_node(node: s_node, relation: edge_relation, label: s_node_label, color: color_prop, url: "/assets/img/img3.png")
             
            end
            @data_collections[:edges] << create_edge(source: s_node, target: e_node, relation: relation, color: '#ccc', relation_name: edge_relation)
-#        end
+        end
     end  
   end
 
