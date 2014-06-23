@@ -84,9 +84,9 @@ module CustomNodeRelationship
     # word.scan(/[A-Z][a-z]*/).join("_").downcase if word.present?
   end
 
-#  def check_node_label(node)
-#    !(node.labels[0].blank? and node.neo_id.to_i <=1000)
-#  end
+ def check_node_label(node)
+   !(node.labels[0].blank? and node.neo_id.to_i <=1000)
+ end
 
   def get_relation_data(node, data_collections, relations, check_end_node, check_node=[] )
     relations.each do |relation|
