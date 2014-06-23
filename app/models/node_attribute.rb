@@ -13,7 +13,7 @@ class NodeAttribute #< DefaultProperty
 
   property :name
   property :attr_type
-  property :color, default: "#FFFF00"
+  # property :color, default: "#FFFF00"
 
   property :content_type 
   property :filename 

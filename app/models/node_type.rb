@@ -8,7 +8,7 @@ class NodeType
   property :uuid 
   
   property :field_name
-  property :color, default: "#00FFFF"
+  # property :color, default: "#00FFFF"
 
   has_one(:is_owned_by).from(:users)
   has_n(:properties).to(NodeAttribute)

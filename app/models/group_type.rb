@@ -5,7 +5,7 @@ class GroupType
   property :created_at, type: DateTime
   property :updated_at, type: DateTime 
   property :uuid 
-  property :color, default: "#0000FF"
+  # property :color, default: "#0000FF"
 
   has_one(:is_owned_by).from(:users)
   has_n(:node_types).to(NodeType)
