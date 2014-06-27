@@ -45,13 +45,17 @@ module CustomNodeRelationship
         relation_arr =[]
         count_rel = {}
 
-        get_count_rel(node)
-
+        node.rels.each do |rel|
+          # count_rel[rel.start_node.labels[0]][relation_type][rel.end_node.labels[0]] 
+          relation_type = rel.load_resource['type']
+          relation_hash_name = "#{rel.start_node.labels[0]}_#{relation_type}_#{rel.end_node.labels[0]}"
+          count_rel[relation_hash_name] = (count_rel[relation_hash_name].blank?) ? 1 : (count_rel[relation_hash_name] += 1)
+        end
         node.rels.each do |rel|
           relation_type = rel.load_resource['type']
           start_node = rel.start_node
           end_node = rel.end_node  
-          relation_hash_name = "#{start_node.labels[0]}_#{relation_type}_#{end_node.labels[0]}"
+           relation_hash_name = "#{start_node.labels[0]}_#{relation_type}_#{rel.end_node.labels[0]}"
           if !rel_start_node.include?start_node.labels[0] or !rel_end_node.include?end_node.labels[0] or !relation_arr.include?relation_type
             
             rel_start_node << start_node.labels[0]
@@ -71,7 +75,9 @@ module CustomNodeRelationship
           end
           
         end
-        
+        Rails.logger.debug count_rel.inspect
+        Rails.logger.debug "END END END END END"
+				Rails.logger.debug "**********************************************"
 
         label_html = prop_name.present? ? "#{prop_name.try(:humanize)}" : "#{label}"
         label_html = "#{label_html} [#{node.neo_id}]"
@@ -170,13 +176,7 @@ module CustomNodeRelationship
     end  
   end
 
-  def get_count_rel(node)
-    node.rels.each do |rel|
-      # count_rel[rel.start_node.labels[0]][relation_type][rel.end_node.labels[0]] 
-      relation_type = rel.load_resource['type']
-      relation_hash_name = "#{rel.start_node.labels[0]}_#{relation_type}_#{rel.end_node.labels[0]}"
-      count_rel[relation_hash_name] = (count_rel[relation_hash_name].blank?) ? 1 : (count_rel[relation_hash_name] += 1)
-    end
-  end  
+  
+
 
 end
