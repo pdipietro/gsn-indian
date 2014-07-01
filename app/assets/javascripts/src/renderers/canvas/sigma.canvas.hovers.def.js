@@ -38,8 +38,8 @@
      
        $.each(node.properties.edge, function(property, value) {  
       
-        value = value.replace(/#right_arrow#/g, "→");
-        value = value.replace(/#left_arrow#/g, "←");
+        value = value.replace(/#right_arrow#/g, "⇨");
+        value = value.replace(/#left_arrow#/g, "⇦");
        
         edge_prop += '<li>'+value+'</li>'
         
