@@ -35,8 +35,12 @@
       });
 
       var edge_prop = ''
-       $.each(node.properties.edge, function(property, value) {   
-        value = value.replace(/-u003E/g, "->");
+     
+       $.each(node.properties.edge, function(property, value) {  
+      
+        value = value.replace(/#right_arrow#/g, "→");
+        value = value.replace(/#left_arrow#/g, "←");
+       
         edge_prop += '<li>'+value+'</li>'
         
         // edge_prop += '<li><span style="color:red; margin-right: 20px; list-style: none">'+(property)+

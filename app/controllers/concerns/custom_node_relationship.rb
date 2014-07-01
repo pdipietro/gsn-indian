@@ -46,35 +46,18 @@ module CustomNodeRelationship
         count_rel = {}
 
         node.rels.each do |rel|
-          # count_rel[rel.start_node.labels[0]][relation_type][rel.end_node.labels[0]] 
           relation_type = rel.load_resource['type']
-          relation_hash_name = "#{rel.start_node.labels[0]}_#{relation_type}_#{rel.end_node.labels[0]}"
+          if rel.start_node.neo_id == node.neo_id 
+            relation_hash_name = "me - #{relation_type} #right_arrow#"
+          else
+            relation_hash_name = "me #left_arrow# #{relation_type} -"
+          end
           count_rel[relation_hash_name] = (count_rel[relation_hash_name].blank?) ? 1 : (count_rel[relation_hash_name] += 1)
         end
-        node.rels.each do |rel|
-          relation_type = rel.load_resource['type']
-          start_node = rel.start_node
-          end_node = rel.end_node  
-           relation_hash_name = "#{start_node.labels[0]}_#{relation_type}_#{rel.end_node.labels[0]}"
-          if !rel_start_node.include?start_node.labels[0] or !rel_end_node.include?end_node.labels[0] or !relation_arr.include?relation_type
-            
-            rel_start_node << start_node.labels[0]
-            rel_end_node << end_node.labels[0]     
-            relation_arr << relation_type
-            
-            # count_rel =  node.rels(type: relation_type).count
-            # binding.pry
-            # Rails.logger.debug rel.inspect
-            # Rails.logger.debug rel.neo_id
-            # Rails.logger.debug "::::::::::::::::::::::::::::::::::::::::"
-            # Rails.logger.debug "(#{rel.start_node.labels[0]}) -> [#{relation_type}] -> (#{rel.end_node.labels[0]})"
-           
-            relation_info << "(#{start_node.labels[0]}) -> [#{relation_type}] -> (#{end_node.labels[0]}) #{count_rel[relation_hash_name]}"          
-          # else
-            
-          end
-          
+        count_rel.each do |rel, count|
+                relation_info << "#{rel} x#{count}"
         end
+        Rails.logger.debug relation_info.inspect
         Rails.logger.debug count_rel.inspect
         Rails.logger.debug "END END END END END"
 				Rails.logger.debug "**********************************************"
