@@ -13,6 +13,11 @@ class User
   property :created_at, type: DateTime
   property :updated_at, type: DateTime
   property :uuid
+  property :ns
+
+  property :other_languages, type: Object
+  property :default_language
+
   # property :uuid, default: SecureRandom.uuid
 
 
@@ -20,6 +25,7 @@ class User
   # validate :id, presence: true
   validates :first_name, presence: true
   validates :last_name, presence: true
+
 
 
   # property :confirmation_token
@@ -33,6 +39,7 @@ class User
   # before_create :create_confirmation_token, if: :is_normal_provider?
   # before_create :set_user
   # after_create  :send_email_confirmation, if: :is_normal_provider?
+  after_create :create_users_relation
 
   # attr_accessor :provider
 
@@ -58,6 +65,7 @@ class User
   def delete_identities
     self.identities.map{|identity| identity.destroy if identity.present?}
   end
+
   #  def create_confirmation_token
   #   # Create the confirmation token.
   #    self.confirmation_token = UserIdentity.hash(UserIdentity.new_random_token)
@@ -79,6 +87,18 @@ class User
   def get_identity(provider)
   	identities.find(provider: provider).next
   end
-  
+
+  def create_users_relation
+    # social_network = get_social_network.next
+    self.create_rel(:_IS_INSTANCE_OF, get_user_model)
+    self.create_rel(:_HAS_VERSION, get_version)
+    self.create_rel(:_HAS_TRANSLATION, get_translation(self.full_name, self.default_language))
+  end  
+
+  def get_user_model 
+    model_id = Neo4j::Session.query('match (n:Model{name: "user"}) RETURN ID(n)').data.flatten.last
+    Neo4j::Node.load(model_id)
+  end
 
 end
+

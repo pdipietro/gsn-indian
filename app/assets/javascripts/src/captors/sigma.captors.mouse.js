@@ -233,6 +233,63 @@
       return false;
     }
 
+    $("#zoomup_graph").click(function(e){      
+       _zoomOnClick(e, 1.3)
+      
+    });
+
+
+   $("#zoomdown_graph").click(function(e){      
+        _zoomOnClick(e, 0.7)
+    });
+
+   function _zoomOnClick(e, ratio_n){
+      var pos,
+          count,
+          ratio,
+          newRatio;
+    
+        
+        ratio = 1 /ratio_n;
+         
+        // Deal with min / max:
+        newRatio = Math.max(
+          _settings('zoomMin'),
+          Math.min(
+            _settings('zoomMax'),
+            _camera.ratio * ratio
+          )
+        );
+       
+        ratio = newRatio / _camera.ratio;
+         
+  
+          count = sigma.misc.animation.killAll(_camera);
+          
+          pos = _camera.cameraPosition(
+            sigma.utils.getX(e) - 250 / 2,
+            sigma.utils.getY(e) - 500 / 2,
+            true
+          );
+
+          sigma.misc.animation.camera(
+            _camera,
+            {
+              x: pos.x * (1 - ratio) + _camera.x,
+              // y: pos.y * (1 - ratio) + _camera.y,
+              ratio: newRatio
+            },
+            {
+              easing: count ? 'quadraticOut' : 'quadraticInOut',
+              duration: _settings('doubleClickZoomDuration')
+            }
+          );
+   
+
+        e.stopPropagation();
+        return false;
+   }
+
     /**
      * The handler listening to the double click custom event. It will
      * basically zoom into the graph.
@@ -244,6 +301,7 @@
           count,
           ratio,
           newRatio;
+          console.log(e)
 
       if (_settings('mouseEnabled')) {
         ratio = 1 / _settings('doubleClickZoomingRatio');
@@ -307,14 +365,16 @@
       var pos,
           count,
           ratio,
-          newRatio;
+          newRatio;          
 
       if (_settings('mouseEnabled')) {
         ratio = sigma.utils.getDelta(e) > 0 ?
           1 / _settings('zoomingRatio') :
           _settings('zoomingRatio');
-
+         console.log(_settings('zoomingRatio')+"zoomingRatio")
         // Deal with min / max:
+
+        console.log(ratio+"ratio")
         newRatio = Math.max(
           _settings('zoomMin'),
           Math.min(
@@ -322,8 +382,9 @@
             _camera.ratio * ratio
           )
         );
+        console.log(newRatio+"newRatio")
         ratio = newRatio / _camera.ratio;
-
+          console.log(ratio+"ratio")
         // Check that the new ratio is different from the initial one:
         if (newRatio !== _camera.ratio) {
           count = sigma.misc.animation.killAll(_camera);

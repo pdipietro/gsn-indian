@@ -1,0 +1,36 @@
+<div class="modal fade" id="newnodeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+      </div>
+      <div class="modal-body" >       
+       <div class="span10"></div>
+
+        <%= form_tag "/groups/create_group", method: :post, remote: :true do %>      
+          <p>
+            <span> Name</span>
+            <%= text_field_tag "group[name]" %>
+          </p>
+
+          <p>
+            <span> Description</span>
+            <%= text_area_tag "group[description]" %>
+          </p>
+
+          <p>
+            <span> Privacy</span>
+            <%= select_tag "group[privacy]", options_for_select(privacy_tags), {:prompt => "--select privacy--"}%>
+          </p>
+
+
+      <div class="modal-footer">
+        <%= submit_tag "Create", class: "btn btn-primary", style: "width:20%" %>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+        <% end %>
+    </div>
+  </div>
+</div>
+</div>

@@ -2,10 +2,12 @@ class SessionsController < ApplicationController
   before_filter :signed_in_user, except: [:destroy]
 
   def new
+    
+    # Neo4j::Session.query('match (n:Model{name: "user identity"}) return n;')
   end
 
   def create    
-    identity = UserIdentity.find(email: params[:session][:email].downcase)
+    identity = UserIdentity.find(conditions: {email: params[:session][:email].downcase})
     
     if identity && UserIdentity.encrypt_password(identity.email, params[:session][:password]) == identity.password
       # Sign the user in and redirect to the user's show page.
@@ -24,7 +26,7 @@ class SessionsController < ApplicationController
   end
 
   def confirm_user
-    identity = UserIdentity.find(confirmation_token: params[:token])    
+    identity = UserIdentity.find(conditions: {confirmation_token: params[:token]})    
     if identity.present?
       identity.confirmed_at = Time.now
       identity.confirmation_token = ""

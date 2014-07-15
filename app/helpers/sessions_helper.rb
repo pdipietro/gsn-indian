@@ -31,7 +31,7 @@ module SessionsHelper
 
   def current_identity  
     remember_token = UserIdentity.hash(cookies[:remember_token])      
-    @current_identity ||= UserIdentity.find(remember_token: remember_token)
+    @current_identity ||= UserIdentity.find(conditions: {remember_token: remember_token})
    
   end
 
@@ -45,7 +45,7 @@ module SessionsHelper
   end
 
   def sign_out
-    current_identity.update(remember_token: UserIdentity.hash(UserIdentity.new_random_token))
+    current_identity.update(remember_token: UserIdentity.hash(UserIdentity.new_random_token)) if current_identity.present?
     cookies.delete(:remember_token)
     self.current_identity = nil
     self.current_user = nil
@@ -65,5 +65,9 @@ module SessionsHelper
      store_location
      redirect_to signin_url, info: "Please sign in."
    end
+ end
+
+ def get_left_menu_data
+    Neo4j::Session.query("match (n:Application:Model)<-[r:_]-(m)<-[k]-(p) return m,p;")
  end
 end

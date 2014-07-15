@@ -8,7 +8,7 @@ class ServicesController < ApplicationController
     oauth_token = auth.credentials.token
     oauth_expires_at = Time.at(auth.credentials.expires_at) if auth.credentials.expires_at
    
-    identity = UserIdentity.find(email: email)    
+    identity = UserIdentity.find(conditions: {email: email})    
     if identity.blank?       
       identity = from_omniauth(auth, current_user, email)      
     end
@@ -29,6 +29,7 @@ class ServicesController < ApplicationController
       redirect_to root_path, :flash => { :error => show_error_messages(identity) }
     end          
   end
+
 
   def destroy
     session[:user_id] = nil

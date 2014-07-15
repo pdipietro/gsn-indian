@@ -353,6 +353,14 @@ $(document).on("click", "#add_relation_node", function() {
   // $("#add_relation_node")
 });
 
+
+$(document).on("click", "#new_group_create", function() {    
+  $("#newnodeModal").modal("show");
+});
+
+
+
+
 var show_attributes = function(e){
   var attr_node = "<h4>Attributes</h4>"
   label = e.data.node.label.split(' ')[0]
@@ -506,3 +514,9 @@ var capitalize_str = function(str){
   });
   return str;
 } 
+
+
+$(document).on("contextmenu", "#graph-container canvas", function(e){
+ alert('Context Menu event has fired!');
+   return false;
+});

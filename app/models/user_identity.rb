@@ -26,6 +26,9 @@ class UserIdentity
   property :confirmation_sent_at, type: DateTime
   property :color#, default: "#00FF00"
 
+
+  property :ns
+
   # validates :nickname, presence: true, length: { maximum: 50 }
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   validates :email, presence: true, format: { with: VALID_EMAIL_REGEX }
@@ -45,6 +48,9 @@ class UserIdentity
   before_create :create_confirmation_token, if: :is_normal_provider?
   # before_create :set_user
   after_create  :send_email_confirmation, if: :is_normal_provider?
+  after_create :create_user_identities_relation
+
+  validate :attribute_constraint
 
   # has_one(:user).from(:identities)
  
@@ -74,7 +80,7 @@ class UserIdentity
 
   def email_uniqueness
     if email.present?
-      identity = UserIdentity.find(email: email.try(:downcase))    
+      identity = UserIdentity.find(conditions: {email: email.try(:downcase)})    
       if identity.present? and (identity.email_changed? or new_record?)        
          errors.add(:email, "already exist.")
       end
@@ -139,7 +145,7 @@ class UserIdentity
   end
 
   def get_relation(provider)
-    provider_relations = self.rels(type: :has_provider)    
+    provider_relations = self.rels(type: :IS_PROVIDED_BY)    
     relation = nil
     provider_relations.map do |pr|          
       if(pr.get_property("name") == provider)
@@ -150,11 +156,11 @@ class UserIdentity
   end
 
   def create_provider_identity(provider, uid, oauth_token, oauth_expires_at)
-    provider_node = Provider.find(provider_name: provider)
+    provider_node = Provider.find(conditions: {provider_name: provider})
     if provider_node.blank?
       provider_node = Provider.create(provider_name: provider) 
     end
-    self.create_rel(:has_provider,  provider_node, {uid: uid, name: provider, created_at: Time.now.to_i, updated_at: Time.now.to_i, oauth_token: oauth_token.to_s, oauth_expires_at: oauth_expires_at.to_s})
+    self.create_rel(:IS_PROVIDED_BY,  provider_node, {uid: uid, name: provider, created_at: Time.now.to_i, updated_at: Time.now.to_i, oauth_token: oauth_token.to_s, oauth_expires_at: oauth_expires_at.to_s})
   end
 
   def update_provider_identity(relation)
@@ -172,7 +178,18 @@ class UserIdentity
   def user
     rels(type: "User#identities")[0].start_node
   end 
-    
+
+  def create_user_identities_relation
+    # social_network = get_social_network.next
+    self.create_rel(:_IS_INSTANCE_OF, get_user_identity_model)
+    self.create_rel(:_HAS_VERSION, get_version)
+    self.create_rel(:_HAS_TRANSLATION, get_translation("user identity", "en-us"), {of: 'name'})
+  end
+
+  def get_user_identity_model 
+    model_id = Neo4j::Session.query('match (n:Model{name: "user identity"}) RETURN ID(n)').data.flatten.last
+    Neo4j::Node.load(model_id)
+  end 
 
   # def set_user
   #   puts "OOOOOOOOOOOOOOOOOOOOOOOOO"
@@ -183,7 +200,32 @@ class UserIdentity
   # 	         User.create(first_name: first_name, last_name: last_name, country: country)  	  		
   # 	       end
   # 	self.user = user
-  # end
 
+  def self.user_identity_fields
+    identity_fields = Neo4j::Session.query('match (n:Model{name: "user identity"})-[:_HAS]->(m{complex: "false"})-[:_]->(t)-[:_IS_A]->(s)
+      return m.name, m.cardinality, s.name, ID(m);').data
+    identity_fields.delete(["remember token", "1", "string", 311])
+    identity_fields.delete(["password digest", "1", "string", 312 ])
+    identity_fields
+  end
+
+  def attribute_constraint    
+    # field_attributes = Neo4j::Session.query('MATCH (n:Model{name: "user identity"})-[:_HAS]->(m) RETURN m.name, m.cardinality, ID(m)')
+    field_attributes = user_identity_fields
+    field_attributes.each do |attr|
+      name = add_underscore(attr[0])
+      cardinality = attr[1]
+      id = attr[3].to_i
+      pattern =Neo4j::Session.query("START n=node(#{id}) MATCH (n)-[:_]->(m)-[:_HAS_CONSTRAINT]->(s) return s.`has pattern`").data.flatten.first 
+      if cardinality=='1' or cardinality=="[1::*]"
+        errors.add(name.to_sym, "must be present.")
+      end
+    end
+    # binding.pry
+  end
+
+
+
+ 
 
 end

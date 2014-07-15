@@ -2,29 +2,29 @@
 module CustomNeo4j
   extend ActiveSupport::Concern
  
-	# def new_labels(*labels)	
-	# 	id = self.neo_id
-		# MATCH (n { name : "dfdfsd" })
-  #       SET n :German
-  #       RETURN n;		
- 
-	# end
+  	# def new_labels(*labels)	
+  	# 	id = self.neo_id
+  		# MATCH (n { name : "dfdfsd" })
+    #       SET n :German
+    #       RETURN n;		
+   
+  	# end
 
-  # def new_labels(*labels) 
-  #   id = self.neo_id
-  #   Rails.logger.debug ":::::::::::::::::::::::::::::::::::::::::::::::"
-  #   Rails.logger.debug labels.inspect
-  #   Rails.logger.debug id
-  #   label = labels[0].to_sym
-  #   # Rails.logger.debug Neo4j::Cypher.query{"MATCH (n) WHERE id(n) = #{id} SET n #{label} RETURN n;"}.to_s
-  #   Rails.logger.debug Neo4j::Cypher.query{'MATCH (n { nickname : "puneetong" }) SET n :dsasdsda RETURN n;'}.to_s
-  #   Rails.logger.debug Neo4j::Cypher.query{'START n= node(1837) SET n :dadad RETURN n;'}.to_s
-      
-#       match (n {id:1})
-# set n :newLlabel
-# return n 
+    # def new_labels(*labels) 
+    #   id = self.neo_id
+    #   Rails.logger.debug ":::::::::::::::::::::::::::::::::::::::::::::::"
+    #   Rails.logger.debug labels.inspect
+    #   Rails.logger.debug id
+    #   label = labels[0].to_sym
+    #   # Rails.logger.debug Neo4j::Cypher.query{"MATCH (n) WHERE id(n) = #{id} SET n #{label} RETURN n;"}.to_s
+    #   Rails.logger.debug Neo4j::Cypher.query{'MATCH (n { nickname : "puneetong" }) SET n :dsasdsda RETURN n;'}.to_s
+    #   Rails.logger.debug Neo4j::Cypher.query{'START n= node(1837) SET n :dadad RETURN n;'}.to_s
+        
+  #       match (n {id:1})
+  # set n :newLlabel
+  # return n 
 
-  # end
+    # end
 
   
 
@@ -93,4 +93,31 @@ module CustomNeo4j
   
   end
 
+  def get_social_network
+     Neo4j::Label.find_all_nodes(:Social_Network)
+  end
+  
+   def get_version
+    app_version = Neo4j::Session.query('match (n:Build{name: "3.0.0"}) return ID(n)').data.flatten.first  
+    varsion_model = Neo4j::Node.load(app_version)
+  end
+
+  def get_translation
+    # Neo4j::Node.load()
+  end
+
+  def get_translation text, language
+    node = Neo4j::Node.create({language: language, text: text}, :Translation)
+    node.create_rel(:_HAS_VERSION, get_version)
+    return node
+  end   
+
+  def add_underscore(str)
+    str.downcase.tr(" ", "_")
+  end
+
+  # def get_model name
+  #   model_id = Neo4j::Session.query('match (n:Model{name: "#{name}"}) RETURN ID(n)')
+  #   Neo4j::Node.load(model_id)
+  # end
 end

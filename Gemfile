@@ -10,7 +10,9 @@ gem 'turbolinks'
 gem 'jbuilder', '~> 1.2'
 gem 'bcrypt-ruby', require: "bcrypt"
 gem 'bootstrap-sass'
-gem 'neo4j', '>= 3.0.0.alpha.3'
+gem 'neo4j', '3.0.0.alpha.7'
+# gem 'neo4j', :git => "http://github.com/andreasronge/neo4j.git", :tag => "v3.0.0.alpha6"
+# gem 'neo4j', :git => "git@github.com:andreasronge/neo4j.git", :tag => "v3.0.0.alpha6"
 gem 'omniauth'
 gem 'omniauth-facebook'
 gem 'omniauth-twitter'

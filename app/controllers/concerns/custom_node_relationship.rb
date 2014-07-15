@@ -47,16 +47,23 @@ module CustomNodeRelationship
 
         node.rels.each do |rel|
           relation_type = rel.load_resource['type']
-          if rel.start_node.neo_id == node.neo_id 
+          Rails.logger.debug":::::::::::::::::::::PPPPPPPPPPPPP:::::::::::::::::::::"
+          Rails.logger.debug relation_type
+          Rails.logger.debug node.neo_id
+          Rails.logger.debug rel.inspect
+          # binding.pry
+          if rel._start_node.neo_id == node.neo_id 
             relation_hash_name = "me - #{relation_type} #right_arrow#"
           else
             relation_hash_name = "me #left_arrow# #{relation_type} -"
           end
           count_rel[relation_hash_name] = (count_rel[relation_hash_name].blank?) ? 1 : (count_rel[relation_hash_name] += 1)
         end
+
         count_rel.each do |rel, count|
                 relation_info << "#{rel} x#{count}"
         end
+        
         Rails.logger.debug relation_info.inspect
         Rails.logger.debug count_rel.inspect
         Rails.logger.debug "END END END END END"
@@ -112,15 +119,15 @@ module CustomNodeRelationship
     relations.each do |relation|
 
        edge_resource = relation.load_resource
-       e_node = relation.end_node
-       e_node_id = relation.end_node.neo_id
+       e_node = relation._end_node
+       e_node_id = relation._end_node.neo_id
        e_node_label = e_node.labels[0]
-       s_node = relation.start_node
-       s_node_id = relation.start_node.neo_id
+       s_node = relation._start_node
+       s_node_id = relation._start_node.neo_id
        s_node_label = s_node.labels[0]
        edge_properties = relation.props
        edge_relation = edge_resource.present? ? edge_resource["type"] : ""
-       color_prop = relation.end_node.props[:color].present? ? relation.end_node.props[:color] : '#666'
+       color_prop = relation._end_node.props[:color].present? ? relation._end_node.props[:color] : '#666'
 #       if s_node_label.present? and check_node_label(s_node)
          unless check_end_node.include? e_node_id
            check_end_node << e_node_id
@@ -138,15 +145,15 @@ module CustomNodeRelationship
     relations.each do |relation|
 
        edge_resource = relation.load_resource
-       e_node = relation.end_node
-       e_node_id = relation.end_node.neo_id
+       e_node = relation._end_node
+       e_node_id = relation._end_node.neo_id
        e_node_label = e_node.labels[0]
-       s_node = relation.start_node
-       s_node_id = relation.start_node.neo_id
+       s_node = relation._start_node
+       s_node_id = relation._start_node.neo_id
        s_node_label = s_node.labels[0]
        edge_properties = relation.props
        edge_relation = edge_resource.present? ? edge_resource["type"] : ""
-       color_prop = relation.end_node.props[:color].present? ? relation.end_node.props[:color] : '#666'
+       color_prop = relation._end_node.props[:color].present? ? relation._end_node.props[:color] : '#666'
 
 #       if s_node_label.present? and check_node_label(s_node)
            unless check_end_node.include? s_node_id
@@ -158,6 +165,8 @@ module CustomNodeRelationship
 #        end
     end  
   end
+
+ 
 
   
 

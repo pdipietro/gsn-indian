@@ -4,7 +4,7 @@ class StaticPagesController < ApplicationController
 	private
 
   def check_user_login
-    unless signed_in?
+    unless signed_in?     	
       redirect_to signin_path
     end
   end

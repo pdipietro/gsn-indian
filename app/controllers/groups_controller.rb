@@ -48,6 +48,37 @@ class GroupsController < ApplicationController
 	    @check_node = [e_node.neo_id, s_node.neo_id, current_user.neo_id]
 	end
 
+	def create_group
+
+		# group_id = Neo4j::Session.query('start n=node( * ) match (n {name:"group"}) return ID(n);').data.flatten[0]
+		# if group_id.present? 
+			# group_type = Neo4j::Node.load(group_id)
+			group = Neo4j::Node.create({name: params[:group][:name], description: params[:group][:description], 
+				                        privacy: params[:group][:privacy], ns: 'ki', created_at: Time.now, updated_at: Time.now}, :Group)	
+			
+			group.create_rel(:_IS_OWNED_BY, current_user)
+
+			version = Neo4j::Session.query('match (n:Build{name: "1.4.1"}) return ID(n);').data.flatten[0]
+			group_version = Neo4j::Node.load(version)
+			group.create_rel(:_HAS_VERSION, group_version)
+
+			metamodel = Neo4j::Session.query('match (n:Metamodel{name: "sequence"}) return ID(n);').data.flatten[0]
+			group_metamodel = Neo4j::Node.load(metamodel)			
+			group.create_rel(:IS_A, group_metamodel)
+
+			translation = Neo4j::Session.query("MATCH (n:Translation{text: 'group', language: 'en-usa'})")
+			group_translation = Neo4j::Node.load(translation)
+			group.create_rel(:HAS_TRANSLATION, group_translation)
+
+			flash.now[:success] = "Group successfully created"
+		# else
+		# 	flash.now[:danger] = "Something went wrong!"
+		# end
+
+		# Neo4j::Session.query('CREATE ( n :Group { name: "#{params[:group][:name]}" , description="#{params[:group][:description]}", privacy: "#{params[:group][:privacy]}", ns:"ki", created_at: "#{Time.now}", updated_at: "#{Time.now}" }) RETURN n;')
+		
+	end
+
 	
 
 end

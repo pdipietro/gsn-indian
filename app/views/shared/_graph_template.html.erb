@@ -1,13 +1,14 @@
   <div id="node_edge_attr" style="display:none">
-  <h4>Node Attributes</h4>  
-  <div id="show_node_attrs"></div>
-  <!-- <h4>Relation</h4>   -->
-  <!-- <div id="show_rel_node"></div> -->
- <!--  <h4>Edge Attributes</h4> 
-  <div id="show_edge_attrs"></div> -->
-</div>  
-  
-
+    <h4>Node Attributes</h4>  
+    <div id="show_node_attrs"></div>
+    <!-- <h4>Relation</h4>   -->
+    <!-- <div id="show_rel_node"></div> -->
+   <!--  <h4>Edge Attributes</h4> 
+    <div id="show_edge_attrs"></div> -->
+  </div>  
+<%= link_to "Zoom Up", "javascript:void(0)", id: "zoomup_graph" %>  
+<%= link_to "Zoom Down", "javascript:void(0)", id: "zoomdown_graph" %>  
+<%= render "shared/left_menu" %>
     <!-- END SIGMA IMPORTS -->
 <div id="container" >
   <div class="graph_side_container pull-left">
@@ -22,7 +23,7 @@
       </ul>
 
       <!-- <li><h4>Participating groups</h4></li> -->
-      <ul><h4><%=link_to "Create new group", new_group_path %> </h4></ul>
+      <ul><h4><%=link_to "Create new group", "javascript:void(0)", id: "new_group_create" %> </h4></ul>
       
 
     </ul>
@@ -31,13 +32,13 @@
 
    <div class="pull-right graph_container_right" > <%= render "shared/search_node" if (controller_name=="users" or controller_name=="user_identities" ) and action_name=="show" %>
 
-  <div id="selected_node_container" style="display: none; clear: both">
-    <p id="selected_first_node" data-id=""></p>
-    <p id="selected_second_node" data-id=""></p>
-    <%= submit_tag "Reset node", id: "reset_node", class: "btn" %><br>
-    <%= submit_tag "Add Relation", id: "add_relation_node", class: "btn btn-primary", style: "margin-top: 10px; display: none;" %>
-   
-  </div>
+    <div id="selected_node_container" style="display: none; clear: both">
+      <p id="selected_first_node" data-id=""></p>
+      <p id="selected_second_node" data-id=""></p>
+      <%= submit_tag "Reset node", id: "reset_node", class: "btn" %><br>
+      <%= submit_tag "Add Relation", id: "add_relation_node", class: "btn btn-primary", style: "margin-top: 10px; display: none;" %>
+     
+    </div>
   </div>
   <style>
     #graph-container {
@@ -57,3 +58,5 @@
   </style>
   <div id="graph-container"></div>
 </div>
+
+<%= render "shared/new_group_modal" %>
