@@ -55,7 +55,7 @@ class UserIdentity
   # has_one(:user).from(:identities)
  
   
-  attr_accessor :first_name, :last_name
+  attr_accessor :first_name, :last_name, :email_address
 
   class << self
 
@@ -201,6 +201,7 @@ class UserIdentity
   # 	       end
   # 	self.user = user
 
+
   def self.user_identity_fields
     identity_fields = Neo4j::Session.query('match (n:Model{name: "user identity"})-[:_HAS]->(m{complex: "false"})-[:_]->(t)-[:_IS_A]->(s)
       return m.name, m.cardinality, s.name, ID(m);').data
@@ -211,21 +212,10 @@ class UserIdentity
 
   def attribute_constraint    
     # field_attributes = Neo4j::Session.query('MATCH (n:Model{name: "user identity"})-[:_HAS]->(m) RETURN m.name, m.cardinality, ID(m)')
-    field_attributes = user_identity_fields
-    field_attributes.each do |attr|
-      name = add_underscore(attr[0])
-      cardinality = attr[1]
-      id = attr[3].to_i
-      pattern =Neo4j::Session.query("START n=node(#{id}) MATCH (n)-[:_]->(m)-[:_HAS_CONSTRAINT]->(s) return s.`has pattern`").data.flatten.first 
-      if cardinality=='1' or cardinality=="[1::*]"
-        errors.add(name.to_sym, "must be present.")
-      end
-    end
+  
+    field_attributes = UserIdentity.user_identity_fields
+    validate_field field_attributes
     # binding.pry
   end
 
-
-
- 
-
-end
+ end

@@ -13,6 +13,8 @@ module ApplicationHelper
   def generate_fields(name, cardinality, type)   
       field_name = "user_identity[#{add_underscore(name)}]"
       prompt_name = "Select #{name.humanize}"
+      required_field = is_required_fields? cardinality
+
       if name=='country'   
         get_select_tag(field_name, country_list, false, prompt_name)    
       elsif name=="default language"       
@@ -20,7 +22,7 @@ module ApplicationHelper
       elsif name=="other languages"
         get_select_tag(field_name, language_list, true, prompt_name)
       else
-        text_field_tag field_name, "", autofocus: true, class: "form-control", placeholder: name.humanize, required: true
+        text_field_tag field_name, "", autofocus: true, class: "form-control", placeholder: name.humanize, required: required_field
       end
 
   end
@@ -49,6 +51,10 @@ module ApplicationHelper
 
    def language_list
      Neo4j::Session.query('MATCH (n:Model{name: "language"})-[:_HAS_CONSTRAINT]->(constraint)-[:_HAS_ENUM]->(list) return list.tag').data.flatten.compact
+   end
+
+   def is_required_fields? cardinality
+    ['1', '[1::*]'].include?cardinality
    end
 
    

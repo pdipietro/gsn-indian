@@ -116,6 +116,34 @@ module CustomNeo4j
     str.downcase.tr(" ", "_")
   end
 
+  def is_required_fields? cardinality
+    ['1', '[1::*]'].include?cardinality
+  end
+
+  def validate_field field_attributes
+    field_attributes.each do |attr|
+      name = add_underscore(attr[0])
+      cardinality = attr[1]
+      id = attr[3].to_i
+      pattern =Neo4j::Session.query("START n=node(#{id}) MATCH (n)-[:_]->(m)-[:_HAS_CONSTRAINT]->(s) return s.`has pattern`").data.flatten.first 
+      regexp = pattern.present? ? (Regexp.new pattern) : nil
+      value = self.send("#{name}")
+      Rails.logger.debug "................................................"
+      Rails.logger.debug name
+      Rails.logger.debug is_required_fields? cardinality
+
+      if (is_required_fields? cardinality) and (value.blank?)
+        errors.add(name.to_sym, "can't be blank.") 
+      end
+
+      if regexp.present? and value.present? and (regexp.match value).blank?
+        errors.add(name.to_sym, "is invalid.") 
+      end
+
+    end
+  end
+
+
   # def get_model name
   #   model_id = Neo4j::Session.query('match (n:Model{name: "#{name}"}) RETURN ID(n)')
   #   Neo4j::Node.load(model_id)

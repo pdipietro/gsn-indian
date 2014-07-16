@@ -66,35 +66,44 @@ class UserIdentitiesController < ApplicationController
     @exist_identity =  UserIdentity.find(conditions: {email: params[:user_identity][:email_address].downcase}) 
     if @exist_identity.blank?        
       if signed_in?
-         user = current_user
+         @user = current_user
       else    
-        user = User.create(first_name: params[:user_identity][:first_name],
+        @user = User.new(first_name: params[:user_identity][:first_name],
                        last_name: params[:user_identity][:last_name], 
                        country: params[:user_identity][:country],
                        other_languages: params[:user_identity][:other_languages],
                        default_language: params[:user_identity][:default_language],
+                       email_address:  params[:user_identity][:email_address],
                        ns: "ki"
                    ) 
 
         # user.create_users_relation                      
       end
 
+    if @user.save
       @identity = UserIdentity.new(country: params[:user_identity][:country], 
         email:  params[:user_identity][:email_address], password: params[:user_identity][:password], 
-      password_confirmation: params[:user_identity][:password_confirmation], 
-      nickname: "#{params[:user_identity][:first_name]} #{params[:user_identity][:last_name]}", ns: "ki")
+        password_confirmation: params[:user_identity][:password_confirmation], 
+        nickname: "#{params[:user_identity][:first_name]} #{params[:user_identity][:last_name]}", 
+        email_address: params[:user_identity][:email_address], ns: "ki")
 
       if @identity.save
-        user.identities << @identity 
+        @user.identities << @identity 
         # @identity.user = user
         @identity.identity_provider("normal")
-
+        
         flash[:success] = signed_in? ? "Identity successfully created" : "Please verify your email"        
         redirect_to @identity
       else
+        show_flash_error_messages(@identity)
         new_identity
         render 'new'
       end
+    else
+      show_flash_error_messages(@user)     
+      new_identity
+      render 'new'
+    end
     else
       relation =  @exist_identity.identity_provider("normal")
 
@@ -155,8 +164,8 @@ class UserIdentitiesController < ApplicationController
       user_form_fields = user_fields + user_identity_fields
       # user_form_fields.delete(["remember token", "1", "string"])
       # user_form_fields.delete(["password digest", "1", "string"])
-      user_form_fields << ["password", "1", "string"]
-      user_form_fields << ["password_confirmation", "1", "string"]
+      # user_form_fields << ["password", "1", "string"]
+      # user_form_fields << ["password_confirmation", "1", "string"]
       @user_form_fields = user_form_fields
     end
 

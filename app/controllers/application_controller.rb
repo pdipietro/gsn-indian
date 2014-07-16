@@ -13,6 +13,15 @@ class ApplicationController < ActionController::Base
   	"<ul>#{error_template}</ul>".html_safe
   end
 
+  def show_flash_error_messages(obj)    
+    message = ""
+    obj.errors.full_messages.map do |msg|
+        message += "#{msg}</br>"
+    end
+    flash[:danger]= message.html_safe
+    
+  end
+
   
   
 end

@@ -20,11 +20,11 @@ class User
 
   # property :uuid, default: SecureRandom.uuid
 
-
+  validate :attribute_constraint
   # validates :uuid, presence: true
   # validate :id, presence: true
-  validates :first_name, presence: true
-  validates :last_name, presence: true
+  # validates :first_name, presence: true
+  # validates :last_name, presence: true
 
 
 
@@ -41,7 +41,7 @@ class User
   # after_create  :send_email_confirmation, if: :is_normal_provider?
   after_create :create_users_relation
 
-  # attr_accessor :provider
+  attr_accessor :email_address
 
   # class << self
   # 	def new_random_token
@@ -98,6 +98,17 @@ class User
   def get_user_model 
     model_id = Neo4j::Session.query('match (n:Model{name: "user"}) RETURN ID(n)').data.flatten.last
     Neo4j::Node.load(model_id)
+  end
+
+  def attribute_constraint    
+    # field_attributes = Neo4j::Session.query('MATCH (n:Model{name: "user identity"})-[:_HAS]->(m) RETURN m.name, m.cardinality, ID(m)')
+  
+    user_attributes = Neo4j::Session.query('match (n:Model{name: "user"})-[:_HAS]->(m{complex: "false"})-[:_]->(t)-[:_IS_A]->(s)
+      return m.name, m.cardinality, s.name, ID(m);').data
+    user_identity_attributes = UserIdentity.user_identity_fields
+    field_attributes = user_attributes + user_identity_attributes
+    validate_field field_attributes
+    # binding.pry
   end
 
 end
