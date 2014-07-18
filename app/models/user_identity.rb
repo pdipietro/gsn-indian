@@ -31,7 +31,7 @@ class UserIdentity
 
   # validates :nickname, presence: true, length: { maximum: 50 }
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
-  validates :email, presence: true, format: { with: VALID_EMAIL_REGEX }
+  # validates :email, presence: true, format: { with: VALID_EMAIL_REGEX }
   validate :email_uniqueness
   validates :password, length: { minimum: 6 }, if: :is_normal_provider?
   validates_confirmation_of :password,
@@ -50,7 +50,7 @@ class UserIdentity
   after_create  :send_email_confirmation, if: :is_normal_provider?
   after_create :create_user_identities_relation
 
-  validate :attribute_constraint
+  # validate :attribute_constraint
 
   # has_one(:user).from(:identities)
  
@@ -218,4 +218,4 @@ class UserIdentity
     # binding.pry
   end
 
- end
+end

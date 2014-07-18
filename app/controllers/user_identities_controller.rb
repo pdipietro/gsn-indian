@@ -72,10 +72,10 @@ class UserIdentitiesController < ApplicationController
                        last_name: params[:user_identity][:last_name], 
                        country: params[:user_identity][:country],
                        other_languages: params[:user_identity][:other_languages],
-                       default_language: params[:user_identity][:default_language],
-                       email_address:  params[:user_identity][:email_address],
+                       default_language: params[:user_identity][:default_language],                       
                        ns: "ki"
                    ) 
+
 
         # user.create_users_relation                      
       end
@@ -85,7 +85,7 @@ class UserIdentitiesController < ApplicationController
         email:  params[:user_identity][:email_address], password: params[:user_identity][:password], 
         password_confirmation: params[:user_identity][:password_confirmation], 
         nickname: "#{params[:user_identity][:first_name]} #{params[:user_identity][:last_name]}", 
-        email_address: params[:user_identity][:email_address], ns: "ki")
+        ns: "ki")
 
       if @identity.save
         @user.identities << @identity 

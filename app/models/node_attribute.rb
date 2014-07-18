@@ -29,7 +29,7 @@ class NodeAttribute #< DefaultProperty
 
   def name_uniqueness   
     if name.present?      
-      n_attribute = NodeAttribute.find(name: name.try(:downcase), attr_type: attr_type ) 
+      n_attribute = NodeAttribute.find(conditions: {name: name.try(:downcase), attr_type: attr_type}) 
       if n_attribute.present? and (n_attribute.name_changed? or new_record?)        
          errors.add(:name, "already exist.")
       end

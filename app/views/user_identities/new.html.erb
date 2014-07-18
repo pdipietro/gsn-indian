@@ -10,12 +10,12 @@
         <%= label_tag field[0] %>
         <%= generate_fields(field[0], field[1], field[2]) %>
       <% end %>
-      
+
       <%= label_tag "Password" %>
-      <%= text_field_tag "password", "", autofocus: true, class: "form-control", placeholder: "Password", required: true%>
+      <%= password_field_tag "password", "", autofocus: true, class: "form-control", placeholder: "Password", required: true%>
 
       <%= label_tag "Password Confirmation" %>
-      <%= text_field_tag "password_confirmation", "", autofocus: true, class: "form-control", placeholder: "Password Confirmation", required: true%>         
+      <%= password_field_tag "password_confirmation", "", autofocus: true, class: "form-control", placeholder: "Password Confirmation", required: true%>         
       <%= submit_tag "Create my account", class: "btn btn-large btn-primary" %>
     <% end %>
   </div>

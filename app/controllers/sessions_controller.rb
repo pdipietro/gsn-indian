@@ -8,7 +8,6 @@ class SessionsController < ApplicationController
 
   def create    
     identity = UserIdentity.find(conditions: {email: params[:session][:email].downcase})
-    
     if identity && UserIdentity.encrypt_password(identity.email, params[:session][:password]) == identity.password
       # Sign the user in and redirect to the user's show page.
       sign_in_user(identity, "normal")
@@ -51,9 +50,9 @@ class SessionsController < ApplicationController
     cookies.permanent[:remember_token] = remember_token
     identity.update(remember_token: UserIdentity.hash(remember_token))
     # identity = identity.get_identity(provider)
-
     self.current_identity = identity
     self.current_user = identity.user
     flash[:success] = "Signed in successfully"
   end
+  
 end
