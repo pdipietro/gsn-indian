@@ -129,7 +129,7 @@ class UserIdentity
 
   def identity_provider(provider, uid="", oauth_token="", oauth_expires_at="")
     relation = get_relation(provider)
-     
+      
     if relation.blank?
       create_provider_identity(provider, uid, oauth_token, oauth_expires_at)
 
@@ -145,22 +145,24 @@ class UserIdentity
   end
 
   def get_relation(provider)
-    provider_relations = self.rels(type: :IS_PROVIDED_BY)    
+    provider_relations = self.rels(type: :IS_PROVIDED_BY)     
     relation = nil
     provider_relations.map do |pr|          
       if(pr.get_property("name") == provider)
         relation = pr
       end
-    end 
+    end     
     return relation 
   end
 
   def create_provider_identity(provider, uid, oauth_token, oauth_expires_at)
     provider_node = Provider.find(conditions: {provider_name: provider})
+    
     if provider_node.blank?
       provider_node = Provider.create(provider_name: provider) 
     end
     self.create_rel(:IS_PROVIDED_BY,  provider_node, {uid: uid, name: provider, created_at: Time.now.to_i, updated_at: Time.now.to_i, oauth_token: oauth_token.to_s, oauth_expires_at: oauth_expires_at.to_s})
+
   end
 
   def update_provider_identity(relation)
@@ -176,7 +178,8 @@ class UserIdentity
   end 
 
   def user
-    rels(type: "User#identities")[0].start_node
+    # binding.pry
+    rels(type: "User#identities")[0]._start_node
   end 
 
   def create_user_identities_relation

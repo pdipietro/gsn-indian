@@ -10,7 +10,7 @@ class ServicesController < ApplicationController
    
     identity = UserIdentity.find(conditions: {email: email})    
     if identity.blank?       
-      identity = from_omniauth(auth, current_user, email)      
+      identity = from_omniauth(auth, current_user, email, provider)      
     end
 
     identity.identity_provider(provider, auth.uid, oauth_token, oauth_expires_at)
@@ -38,32 +38,47 @@ class ServicesController < ApplicationController
   
   private
 
-    def from_omniauth(auth, c_user, email)
+    def from_omniauth(auth, c_user, email, provider)
       country = auth.info.location.split(',')[1].strip if auth.info.location.present?
+      country ||= "country"
+      language = auth.extra.raw_info.lang
+      langauge ||= 'en'
+      if provider=="twitter"
+        first_name =  auth.info.name.split(" ")[0] 
+        last_name =  auth.info.name.split(" ")[1] 
+      else
+        first_name =  auth.info.first_name 
+        last_name =  auth.info.last_name 
+      end
       user = if c_user.present?
                 c_user
              else
-               User.create(first_name: auth.info.first_name,
-                           last_name: auth.info.last_name,                         
-                           country: country                         
+               User.create(first_name: first_name,
+                           last_name: last_name,                         
+                           country: country ,
+                           other_languages: langauge,
+                           default_language: [langauge],                       
+                           ns: "ki"                        
                            ) 
               end
 
-     
-      identity = UserIdentity.new
-      
-      # identity.provider = auth.provider
-      # identity.uid = auth.uid
-      identity.email = email
-      identity.nickname = auth.info.nickname     
-      identity.country = country
+       
+        identity = UserIdentity.new
+        
+        # identity.provider = auth.provider
+        # identity.uid = auth.uid
+        identity.email = email
+        identity.nickname = auth.info.nickname     
+        identity.country = country      
+        identity.ns = "ki"
 
-      if identity.save
-        user.identities << identity 
-        # identity.user = user         
-      end
-      
-      return identity  
+        if identity.save       
+          user.identities << identity 
+          # identity.user = user         
+        end
+       
+        return identity                 
+
     end
 
     def sign_in_user(identity, provider)
@@ -71,7 +86,7 @@ class ServicesController < ApplicationController
       cookies.permanent[:remember_token] = remember_token
       identity.update(remember_token: UserIdentity.hash(remember_token))
       # identity = identity.get_identity(provider)
-
+     
       self.current_identity = identity
       self.current_user = identity.user
       flash[:success] = "Signed in successfully"

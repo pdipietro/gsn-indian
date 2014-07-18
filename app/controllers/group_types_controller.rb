@@ -16,7 +16,7 @@ class GroupTypesController < ApplicationController
           rel_group_name = rel_group_type.load_resource
           e_node = rel_group_type.end_node
           e_node_id = rel_group_type.end_node.neo_id
-          s_node = rel_group_type.start_node
+          s_node = rel_group_type._start_node
           edge_relation = rel_group_name.present? ? rel_group_name["type"] : ""
           # color_prop = r.end_node.props[:color].present? ? r.end_node.props[:color] : '#666'
 
@@ -28,7 +28,7 @@ class GroupTypesController < ApplicationController
               rel_nt_type = rel_nt.load_resource
               e_node_nt = rel_nt.end_node
               e_node_nt_id = rel_nt.end_node.neo_id
-              s_node_nt = rel_nt.start_node
+              s_node_nt = rel_nt._start_node
               nt_edge_relation = rel_nt_type.present? ? rel_nt_type["type"] : ""
               # nt_color_prop = rel_nt.end_node.props[:color].present? ? rel_nt.end_node.props[:color] : '#666'
             

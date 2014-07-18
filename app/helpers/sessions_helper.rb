@@ -29,7 +29,7 @@ module SessionsHelper
     @current_identity = identity
   end
 
-  def current_identity  
+  def current_identity     
     remember_token = UserIdentity.hash(cookies[:remember_token])      
     @current_identity ||= UserIdentity.find(conditions: {remember_token: remember_token})
    
@@ -40,7 +40,7 @@ module SessionsHelper
   end
 
 
-  def signed_in?
+  def signed_in?    
     !current_identity.nil? && current_identity.confirmed?
   end
 
