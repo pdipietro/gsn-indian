@@ -243,6 +243,34 @@
         _zoomOnClick(e, 0.7)
     });
 
+   $("#centeralized_graph").click(function(e){      
+        var pos,
+        count,
+        ratio,
+        newRatio;        
+
+        count = sigma.misc.animation.killAll(_camera);          
+       
+        sigma.misc.animation.camera(
+          _camera,
+          {
+            x: 70,
+            y: 30,
+            ratio: 1.3
+          },
+          {
+            easing: count ? 'quadraticOut' : 'quadraticInOut',
+            duration: _settings('doubleClickZoomDuration')
+          }
+        );
+ 
+
+      e.stopPropagation();
+      return false;
+        
+    });
+
+
    function _zoomOnClick(e, ratio_n){
       var pos,
           count,
