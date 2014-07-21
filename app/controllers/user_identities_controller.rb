@@ -90,7 +90,7 @@ class UserIdentitiesController < ApplicationController
           email:  params[:user_identity][:email_address], password: params[:user_identity][:password], 
           password_confirmation: params[:user_identity][:password_confirmation], 
           nickname: "#{params[:user_identity][:first_name]} #{params[:user_identity][:last_name]}", 
-          ns: "ki")
+          ns: "ki", provider: "normal")
 
         if @identity.save
           @user.identities << @identity 

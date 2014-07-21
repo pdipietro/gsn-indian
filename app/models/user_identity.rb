@@ -87,7 +87,7 @@ class UserIdentity
   end
 
 
-  def secure_password  
+  def secure_password    
     if (password_changed? or new_record?)
       self.password = UserIdentity.encrypt_password(email, password) 
     end
@@ -176,8 +176,7 @@ class UserIdentity
     rels(dir: :outgoing, type: :groups)
   end 
 
-  def user
-    # binding.pry
+  def user    
     rels(type: "User#identities")[0]._start_node
   end 
 

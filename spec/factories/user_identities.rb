@@ -12,6 +12,7 @@ FactoryGirl.define do
     confirmation_token UserIdentity.hash(UserIdentity.new_random_token)
     confirmation_sent_at Time.now.utc
     ns "ki"
+    provider 'normal'
    
 
 
