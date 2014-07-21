@@ -46,11 +46,11 @@ module ApplicationHelper
    end
 
    def country_list
-     Neo4j::Session.query('MATCH (n:Model{name: "country"})-[:_HAS_CONSTRAINT]->(constraint)-[:_HAS_ENUM]->(list) return list.tag').data.flatten.compact
+     Neo4j::Session.query('MATCH (n:Model{name: "country"})-[:_HAS_CONSTRAINT]->(constraint)-[:_HAS_ENUM]->(list)--(des) return des.text').data.flatten.compact
    end
 
    def language_list
-     Neo4j::Session.query('MATCH (n:Model{name: "language"})-[:_HAS_CONSTRAINT]->(constraint)-[:_HAS_ENUM]->(list) return list.tag').data.flatten.compact
+     Neo4j::Session.query('MATCH (n:Model{name: "language"})-[:_HAS_CONSTRAINT]->(constraint)-[:_HAS_ENUM]->(list)--(des) return des.text').data.flatten.compact
    end
 
    def is_required_fields? cardinality
