@@ -41,11 +41,12 @@ class ServicesController < ApplicationController
     def from_omniauth(auth, c_user, email, provider)
       country = auth.info.location.split(',')[1].strip if auth.info.location.present?
       country ||= "country"
-      language = if (auth.extra.present? and auth.extra.raw_info.present?)
+      language = if (auth.extra.present? and auth.extra.raw_info.present? and auth.extra.raw_info.lang.present?)
                     auth.extra.raw_info.lang
                   else
                     'en'
-                  end       
+                  end 
+
       if provider=="twitter"
         first_name =  auth.info.name.split(" ")[0] 
         last_name =  auth.info.name.split(" ")[1] 
