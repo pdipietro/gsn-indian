@@ -47,13 +47,12 @@ class UserIdentity
   before_create :set_nickname
   before_create :create_confirmation_token, if: :is_normal_provider?
   # before_create :set_user
-  after_create  :send_email_confirmation, if: :is_normal_provider?
+  after_create :send_email_confirmation, if: :is_normal_provider?
   after_create :create_user_identities_relation
 
   # validate :attribute_constraint
 
   # has_one(:user).from(:identities)
- 
   
   attr_accessor :first_name, :last_name, :email_address
 
@@ -88,7 +87,7 @@ class UserIdentity
   end
 
 
-  def secure_password    
+  def secure_password  
     if (password_changed? or new_record?)
       self.password = UserIdentity.encrypt_password(email, password) 
     end
@@ -193,6 +192,7 @@ class UserIdentity
     model_id = Neo4j::Session.query('match (n:Model{name: "user identity"}) RETURN ID(n)').data.flatten.last
     Neo4j::Node.load(model_id)
   end 
+
 
   # def set_user
   #   puts "OOOOOOOOOOOOOOOOOOOOOOOOO"

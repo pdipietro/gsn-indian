@@ -5,7 +5,7 @@ describe "sessions/new.html.erb" do
     	before { visit signin_path }      
 
         it "signs users in" do
-		    fill_in "Email address", :with => UserIdentity.last.email
+		    fill_in "Email address", :with => "ankur.jain@ongraph.com"
 		    fill_in "Password", :with => "foobar"
 		    click_button "Sign in"
 

@@ -10,16 +10,17 @@ class UsersController < ApplicationController
   end
 
   def show
-    node_id = params[:id].present? ? params[:id] : params[:search_node]
+   
+    node_id = params[:id].present? ? params[:id] : params[:search_node]    
     @node = Neo4j::Node.load(node_id)
+    @check_node = []
+    @data_collections = {}
+    @data_collections[:nodes] = []
+    @data_collections[:edges] = []
 
     if @node.present? and check_node_label(@node)
       outgoing_relations = @node.rels(dir: :outgoing)
       incoming_relations = @node.rels(dir: :incoming)
-      @data_collections = {}
-      @data_collections[:nodes] = []
-      @data_collections[:edges] = []
-      @check_node = []
       check_node = []
       get_relation_data(@node, @data_collections, outgoing_relations, @check_node, check_node )
       get_relation_data_incoming(@node, @data_collections, incoming_relations, [], check_node )

@@ -6,7 +6,7 @@ describe NodeAttributesController do
     end
 	describe 'GET #index' do
 		before do
-	       @identity = UserIdentity.last
+	       @identity = UserIdentity.find(conditions: {country:"Indoneasia"})
 	       user_sign_in(@identity)
 	    end
 		let(:get_index) { get :index }
@@ -19,7 +19,7 @@ describe NodeAttributesController do
 
     describe 'GET #new' do
     	before do
-	       @identity = UserIdentity.last
+	       @identity = UserIdentity.find(conditions: {country:"Indoneasia"})
 	       user_sign_in(@identity)
 	    end
 		  let(:get_new) { get :new }
@@ -33,7 +33,7 @@ describe NodeAttributesController do
 
     describe 'POST #create' do
     	before do
-	       @identity = UserIdentity.last
+	       @identity = UserIdentity.find(conditions: {country:"Indoneasia"})
 	       user_sign_in(@identity)
 	    end
 		it "node attributes not saved then render" do

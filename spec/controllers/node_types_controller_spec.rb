@@ -7,7 +7,7 @@ describe NodeTypesController do
     end
 	describe 'GET #index' do
 		before do
-	       @identity = UserIdentity.last
+	       @identity = UserIdentity.find(conditions: {country:"Indoneasia"})
 	       user_sign_in(@identity)
 	    end
 		let(:get_index) { get :index }
@@ -20,7 +20,7 @@ describe NodeTypesController do
 
     describe 'GET #new' do
     	before do
-	       @identity = UserIdentity.last
+	       @identity = UserIdentity.find(conditions: {country:"Indoneasia"})
 	       user_sign_in(@identity)
 	    end
 		  let(:get_new) { get :new }
@@ -33,7 +33,7 @@ describe NodeTypesController do
 
     describe 'POST #create' do
     	before do
-	       @identity = UserIdentity.last
+	       @identity = UserIdentity.find(conditions: {country:"Indoneasia"})
 	       user_sign_in(@identity)
 	       @node_attribute = FactoryGirl.create(:node_attribute)
 

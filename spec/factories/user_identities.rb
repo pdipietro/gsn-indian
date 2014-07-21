@@ -11,6 +11,7 @@ FactoryGirl.define do
     remember_token SecureRandom.urlsafe_base64
     confirmation_token UserIdentity.hash(UserIdentity.new_random_token)
     confirmation_sent_at Time.now.utc
+    ns "ki"
    
 
 

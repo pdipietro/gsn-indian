@@ -27,8 +27,8 @@ module CustomNodeRelationship
         relation_name = []
         relation_id = []
         relation_info = []
-         Rails.logger.debug node.inspect
-         Rails.logger.debug "LLLLLLLLLLLLLLLLLLL START NODE START NODE"
+         # Rails.logger.debug node.inspect
+         # Rails.logger.debug "LLLLLLLLLLLLLLLLLLL START NODE START NODE"
         # node.rels.each do |rel|
         #   relation_type = rel.load_resource['type']
         #   # binding.pry
@@ -46,11 +46,7 @@ module CustomNodeRelationship
         count_rel = {}
 
         node.rels.each do |rel|
-          relation_type = rel.load_resource['type']
-          Rails.logger.debug":::::::::::::::::::::PPPPPPPPPPPPP:::::::::::::::::::::"
-          Rails.logger.debug relation_type
-          Rails.logger.debug node.neo_id
-          Rails.logger.debug rel.inspect
+          relation_type = rel.load_resource['type']         
           # binding.pry
           if rel._start_node.neo_id == node.neo_id 
             relation_hash_name = "me - #{relation_type} #right_arrow#"
@@ -64,10 +60,10 @@ module CustomNodeRelationship
                 relation_info << "#{rel} x#{count}"
         end
         
-        Rails.logger.debug relation_info.inspect
-        Rails.logger.debug count_rel.inspect
-        Rails.logger.debug "END END END END END"
-				Rails.logger.debug "**********************************************"
+    #     Rails.logger.debug relation_info.inspect
+    #     Rails.logger.debug count_rel.inspect
+    #     Rails.logger.debug "END END END END END"
+				# Rails.logger.debug "**********************************************"
 
         label_html = prop_name.present? ? "#{prop_name.try(:humanize)}" : "#{label}"
         label_html = "#{label_html} [#{node.neo_id}]"

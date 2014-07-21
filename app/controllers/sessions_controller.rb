@@ -10,11 +10,11 @@ class SessionsController < ApplicationController
     identity = UserIdentity.find(conditions: {email: params[:session][:email].downcase})
     if identity && UserIdentity.encrypt_password(identity.email, params[:session][:password]) == identity.password
       # Sign the user in and redirect to the user's show page.
-      sign_in_user(identity, "normal")
-      redirect_to user_path(identity.user)
+      sign_in_user(identity, "normal")     
+      redirect_to user_path(identity.user.neo_id)
     else
       # Create an error message and re-render the signin form.
-      flash.now[:error] = 'Invalid email/password combination' # Not quite right!
+      flash.now[:danger] = 'Invalid email/password combination' # Not quite right!
       render 'new'
     end
   end

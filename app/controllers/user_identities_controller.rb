@@ -63,7 +63,14 @@ class UserIdentitiesController < ApplicationController
   def create
     # @identity = UserIdentity.new(identity_params)
     # if @identity.save
-    @exist_identity =  UserIdentity.find(conditions: {email: params[:user_identity][:email_address].downcase}) 
+    @exist_identity =  UserIdentity.find(conditions: {email: params[:user_identity][:email_address].downcase})   
+    # if params[:password]!=params[:password_confirmation]
+    #   new_identity
+    #   flash[:danger] = "Password not match with confirm password."      
+    #   render 'new'
+    #   return
+    # end 
+
     if @exist_identity.blank?        
       if signed_in?
          @user = current_user
@@ -75,40 +82,39 @@ class UserIdentitiesController < ApplicationController
                        default_language: params[:user_identity][:default_language],                       
                        ns: "ki"
                    ) 
-
-
         # user.create_users_relation                      
       end
 
-    if @user.save
-      @identity = UserIdentity.new(country: params[:user_identity][:country], 
-        email:  params[:user_identity][:email_address], password: params[:user_identity][:password], 
-        password_confirmation: params[:user_identity][:password_confirmation], 
-        nickname: "#{params[:user_identity][:first_name]} #{params[:user_identity][:last_name]}", 
-        ns: "ki")
+      if @user.save
+        @identity = UserIdentity.new(country: params[:user_identity][:country], 
+          email:  params[:user_identity][:email_address], password: params[:user_identity][:password], 
+          password_confirmation: params[:user_identity][:password_confirmation], 
+          nickname: "#{params[:user_identity][:first_name]} #{params[:user_identity][:last_name]}", 
+          ns: "ki")
 
-      if @identity.save
-        @user.identities << @identity 
-        # @identity.user = user
-        @identity.identity_provider("normal")
-        
-        flash[:success] = signed_in? ? "Identity successfully created" : "Please verify your email"        
-        redirect_to @identity
+        if @identity.save
+          @user.identities << @identity 
+          # @identity.user = user
+          @identity.identity_provider("normal")
+          
+          flash[:success] = signed_in? ? "Identity successfully created" : "Please verify your email"        
+          redirect_to @identity
+        else
+          show_flash_error_messages(@identity)
+          new_identity
+          render 'new'
+        end
       else
-        show_flash_error_messages(@identity)
+        show_flash_error_messages(@user)     
         new_identity
         render 'new'
       end
     else
-      show_flash_error_messages(@user)     
-      new_identity
-      render 'new'
-    end
-    else
       relation =  @exist_identity.identity_provider("normal")
-
+      
       if relation == :error_messsage
         @identity = @exist_identity
+        new_identity
         flash[:danger] = "Identity already created"      
         render 'new'
       end

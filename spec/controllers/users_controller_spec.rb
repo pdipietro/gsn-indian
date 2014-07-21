@@ -17,7 +17,7 @@ describe UsersController do
 
   # describe 'GET #show' do
   #   before do
-  #     @identity = UserIdentity.last
+  #     @identity = UserIdentity.find(conditions: {country:"Indoneasia"})
   #     user_sign_in(@identity)
   #   end
   #   it "should show the user" do
@@ -37,7 +37,7 @@ describe UsersController do
 
   describe 'GET #edit' do
     before do
-      @identity = UserIdentity.last
+      @identity = UserIdentity.find(conditions: {country:"Indoneasia"})
       user_sign_in(@identity)
     end
     it "should edit the user" do
@@ -48,7 +48,7 @@ describe UsersController do
 
    describe 'PUT update' do
      before do
-       @identity = UserIdentity.last
+       @identity = UserIdentity.find(conditions: {country:"Indoneasia"})
        user_sign_in(@identity)
      end
      it "should update the user" do
@@ -64,7 +64,7 @@ describe UsersController do
 
   describe 'POST create_relation' do
      before do
-       @identity = UserIdentity.last
+       @identity = UserIdentity.find(conditions: {country:"Indoneasia"})
        user_sign_in(@identity)
      end
 
@@ -80,7 +80,7 @@ describe UsersController do
   
   describe "should destroy user" do  
     before do
-       @identity = UserIdentity.last
+       @identity = UserIdentity.find(conditions: {country:"Indoneasia"})
        user_sign_in(@identity)
     end
 

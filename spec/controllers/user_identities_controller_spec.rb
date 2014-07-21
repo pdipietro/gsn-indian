@@ -28,7 +28,7 @@ describe UserIdentitiesController do
     describe 'GET #edit' do
       before do
           user_sign_in(@identity)
-          @identity = UserIdentity.last
+          @identity = UserIdentity.find(conditions: {country:"Indoneasia"})
       end
       it "should edit the identity" do
           # visit edit_user_identity_path(@identity)
@@ -39,7 +39,7 @@ describe UserIdentitiesController do
 
     describe 'GET #show' do
       before do
-          @identity = UserIdentity.last
+          @identity = UserIdentity.find(conditions: {country:"Indoneasia"})
           user_sign_in(@identity)
       end
       it "should show the identity" do   
@@ -50,7 +50,7 @@ describe UserIdentitiesController do
 
     describe 'PUT update' do
       before do
-        @identity = UserIdentity.last
+        @identity = UserIdentity.find(conditions: {country:"Indoneasia"})
         user_sign_in(@identity)
       end
       it "should update the identity and redirect" do
@@ -63,12 +63,13 @@ describe UserIdentitiesController do
         response.should be_successful
         response.should render_template("edit")
       end
+      
     end
   
     describe "DELETE destroy identity" do
 
       before do
-        @identity = UserIdentity.last
+        @identity = UserIdentity.find(conditions: {country:"Indoneasia"})
         user_sign_in(@identity)
       end
 
