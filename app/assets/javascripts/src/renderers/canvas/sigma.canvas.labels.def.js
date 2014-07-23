@@ -33,10 +33,9 @@
       fontSize + 'px ' + settings('font');
     context.fillStyle = (settings('labelColor') === 'node') ?
       (node.color || settings('defaultNodeColor')) :
-      settings('defaultLabelColor');
-
+      settings('defaultLabelColor');  
     context.fillText(
-      node.label,
+      node.node_label,
       Math.round(node[prefix + 'x'] + size + 3),
       Math.round(node[prefix + 'y'] + fontSize / 3)
     );

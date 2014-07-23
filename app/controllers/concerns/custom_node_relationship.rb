@@ -64,9 +64,10 @@ module CustomNodeRelationship
     #     Rails.logger.debug count_rel.inspect
     #     Rails.logger.debug "END END END END END"
        
-        label_html =  prop_name.present? ? "#{prop_name.try(:humanize)}" : label.to_s
-
+        label_html =  label.to_s
         label_html = "#{label_html} [#{node.neo_id}]"
+        node_label =  prop_name.present? ? "#{prop_name.try(:humanize)}" : label.to_s
+        node_label = "#{node_label} [#{node.neo_id}]"
         {
                    id:         node.neo_id.to_s,  
                    label:      label_html, 
@@ -75,6 +76,7 @@ module CustomNodeRelationship
                    size:       Random.rand(1-6664664646),
                    color:      color,
                    type:       "image",
+                   node_label: node_label,
                    url:        url,
                    properties: {
                     node:         node.props,
