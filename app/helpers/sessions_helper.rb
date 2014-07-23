@@ -70,4 +70,5 @@ module SessionsHelper
  def get_left_menu_data
     Neo4j::Session.query("match (n:Application:Model)<-[r:_]-(m)<-[k]-(p) return m,p;")
  end
+
 end
