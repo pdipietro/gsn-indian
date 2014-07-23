@@ -1,5 +1,5 @@
 class Notification < ActionMailer::Base
-  default from: "registration@ssdcafe.org"
+  default from: "signup@crowdupcafe.com"
 
   def send_confirmation_email(identity)
   	@identity = identity

@@ -28,14 +28,27 @@ GSN::Application.configure do
   # number of complex assets.
   config.assets.debug = true
 
-  config.action_mailer.smtp_settings = {
-        address: 'smtp.ssdcafe.org',
+  # config.action_mailer.smtp_settings = {
+  #       address: 'smtp.ssdcafe.org',
+  #       port: '587',
+  #       domain: 'webmail.ssdcafe.org',
+  #       user_name: 'registration@ssdcafe.org',
+  #       password: 'mymLwLp2',
+  #       authentication: :plain,
+  #       enable_starttls_auto: true,
+  #       openssl_verify_mode:  'none'
+  #   }
+
+
+    config.action_mailer.smtp_settings = {
+        address: 'mail.crowdupcafe.com',
         port: '587',
-        domain: 'webmail.ssdcafe.org',
-        user_name: 'registration@ssdcafe.org',
-        password: 'mymLwLp2',
-        authentication: :plain,
+        domain: 'crowdupcafe.com',
+        user_name: 'signup@crowdupcafe.com',
+        password: 'lqUvTlDE87s1',
+        authentication: :login,
         enable_starttls_auto: true,
         openssl_verify_mode:  'none'
     }
+
 end

@@ -40,7 +40,7 @@ module SessionsHelper
   end
 
 
-  def signed_in?    
+  def signed_in?  
     !current_identity.nil? && current_identity.confirmed?
   end
 
