@@ -42,7 +42,7 @@ describe NodeTypesController do
 		it "should create & save the node type" do
 	       post :create, id: @identity.id, node_type: { field_name: "attr1" }, 
 	                                                    node_attr_type: {"#{@node_attribute.attr_type}" => "#{@node_attribute.id}"}
-	       response.should redirect_to "/node_types?identity=#{@identity.uuid}"
+	       response.should redirect_to "/node_types"
 	    end
 
 	    # it "should not create & save the node type" do

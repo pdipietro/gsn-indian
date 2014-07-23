@@ -128,10 +128,7 @@ module CustomNeo4j
       pattern =Neo4j::Session.query("START n=node(#{id}) MATCH (n)-[:_]->(m)-[:_HAS_CONSTRAINT]->(s) return s.`has pattern`").data.flatten.first 
       regexp = pattern.present? ? (Regexp.new pattern) : nil
       value = self.send("#{name}")
-      Rails.logger.debug "................................................"
-      Rails.logger.debug name
-      Rails.logger.debug is_required_fields? cardinality
-
+      
       if (is_required_fields? cardinality) and (value.blank?)
         errors.add(name.to_sym, "can't be blank.") 
       end

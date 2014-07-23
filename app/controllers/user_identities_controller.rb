@@ -172,7 +172,7 @@ class UserIdentitiesController < ApplicationController
       # user_form_fields.delete(["password digest", "1", "string"])
       # user_form_fields << ["password", "1", "string"]
       # user_form_fields << ["password_confirmation", "1", "string"]
-      @user_form_fields = user_form_fields
+      @user_form_fields = user_form_fields.uniq
     end
 
   

@@ -63,9 +63,9 @@ module CustomNodeRelationship
     #     Rails.logger.debug relation_info.inspect
     #     Rails.logger.debug count_rel.inspect
     #     Rails.logger.debug "END END END END END"
-				# Rails.logger.debug "**********************************************"
+       
+        label_html =  prop_name.present? ? "#{prop_name.try(:humanize)}" : label.to_s
 
-        label_html = prop_name.present? ? "#{prop_name.try(:humanize)}" : "#{label}"
         label_html = "#{label_html} [#{node.neo_id}]"
         {
                    id:         node.neo_id.to_s,  
@@ -116,18 +116,21 @@ module CustomNodeRelationship
 
        edge_resource = relation.load_resource
        e_node = relation._end_node
-       e_node_id = relation._end_node.neo_id
-       e_node_label = e_node.labels[0]
+       e_node_id = relation._end_node.neo_id       
+       e_node_label = "#{e_node.labels.join(",")}"
+       # e_node_label = e_node.labels[0]
        s_node = relation._start_node
        s_node_id = relation._start_node.neo_id
-       s_node_label = s_node.labels[0]
+       s_node_label ="#{s_node.labels.join(",")}"
+      
+       # s_node_label = s_node.labels[0]
        edge_properties = relation.props
        edge_relation = edge_resource.present? ? edge_resource["type"] : ""
        color_prop = relation._end_node.props[:color].present? ? relation._end_node.props[:color] : '#666'
 #       if s_node_label.present? and check_node_label(s_node)
          unless check_end_node.include? e_node_id
            check_end_node << e_node_id
-           data_collections[:nodes] << create_node(node: e_node, relation: edge_relation, label: e_node.labels[0].to_s, color: color_prop)
+           data_collections[:nodes] << create_node(node: e_node, relation: edge_relation, label: e_node_label, color: color_prop)
    
          end 
 #       end
@@ -143,10 +146,13 @@ module CustomNodeRelationship
        edge_resource = relation.load_resource
        e_node = relation._end_node
        e_node_id = relation._end_node.neo_id
-       e_node_label = e_node.labels[0]
+       e_node_label = e_node_label = "#{e_node.labels.join(",")}"
+       # e_node_label = e_node.labels[0]
        s_node = relation._start_node
        s_node_id = relation._start_node.neo_id
-       s_node_label = s_node.labels[0]
+       s_node_label = "#{s_node.labels.join(",")}"
+      
+       # s_node_label = s_node.labels[0]
        edge_properties = relation.props
        edge_relation = edge_resource.present? ? edge_resource["type"] : ""
        color_prop = relation._end_node.props[:color].present? ? relation._end_node.props[:color] : '#666'

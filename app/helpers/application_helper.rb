@@ -46,15 +46,21 @@ module ApplicationHelper
    end
 
    def country_list
-     Neo4j::Session.query('MATCH (n:Model{name: "country"})-[:_HAS_CONSTRAINT]->(constraint)-[:_HAS_ENUM]->(list)--(des) return des.text').data.flatten.compact
+     Neo4j::Session.query('MATCH (n:Model{name: "country"})-[:_HAS_CONSTRAINT]->(constraint)-[:_HAS_ENUM]->(list)-[r:_HAS_TRANSLATION]->(des {language : "en-us"}) return des.text order by des.text;').data.flatten.compact
+     # Neo4j::Session.query('MATCH (n:Model{name: "country"})-[:_HAS_CONSTRAINT]->(constraint)-[:_HAS_ENUM]->(list)--(des) return des.text').data.flatten.compact
    end
 
    def language_list
-     Neo4j::Session.query('MATCH (n:Model{name: "language"})-[:_HAS_CONSTRAINT]->(constraint)-[:_HAS_ENUM]->(list)--(des) return des.text').data.flatten.compact
+     Neo4j::Session.query('MATCH (n:Model{name: "language"})-[:_HAS_CONSTRAINT]->(constraint)-[:_HAS_ENUM]->(list)-[r:_HAS_TRANSLATION]->(des {language : "en-us"}) return des.text order by des.text;').data.flatten.compact
+     # Neo4j::Session.query('MATCH (n:Model{name: "language"})-[:_HAS_CONSTRAINT]->(constraint)-[:_HAS_ENUM]->(list)--(des) return des.text').data.flatten.compact
    end
 
    def is_required_fields? cardinality
     ['1', '[1::*]'].include?cardinality
+   end
+
+   def get_social_network_default_language
+      Neo4j::Session.query('MATCH (n:Social_Network)  return n.`default language`').data.flatten.compact.first
    end
 
    

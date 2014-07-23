@@ -71,7 +71,7 @@ class UsersController < ApplicationController
       # end
 
       # @providers[:edges] << create_edge(source: current_user, target: @identity, relation: @identity.rels(type: 'User#identities')[0], color: '#ccc')
-      @data_collections[:nodes] << create_node(node: @node, label: @node.labels[0], color: @node.props[:color], url: "/assets/img/img2.png") 
+      @data_collections[:nodes] << create_node(node: @node, label: "#{@node.labels.join(",")}", color: @node.props[:color], url: "/assets/img/img2.png") 
     else
       @error_message= "Node #{node_id} not found."
     end

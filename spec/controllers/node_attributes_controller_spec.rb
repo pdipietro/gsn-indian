@@ -43,7 +43,7 @@ describe NodeAttributesController do
 
 	    it "should create the node attributes and redirect" do
 	       post :create, id: @identity.id, node_attribute: {name: "#{Faker::Name.name}", attr_type: 'DataType' }
-	       response.should redirect_to "/node_attributes?identity=#{@identity.uuid}"
+	       response.should redirect_to "/node_attributes"
 	    end
 
     end

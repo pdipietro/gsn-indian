@@ -39,7 +39,7 @@ describe GroupsController do
               
       it 'should create the group and redirect' do
         post :create, node_types: {"#{@node_type.field_name}" => "hello"}
-        response.should redirect_to "/groups?identity=#{@identity.uuid}"    
+        response.should redirect_to "/groups"    
       end
     end
 

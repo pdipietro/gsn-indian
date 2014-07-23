@@ -27,8 +27,8 @@ describe UserIdentitiesController do
 
     describe 'GET #edit' do
       before do
-          user_sign_in(@identity)
-          @identity = UserIdentity.find(conditions: {country:"Indoneasia"})
+          user_sign_in(@identity)         
+          @identity = UserIdentity.last
       end
       it "should edit the identity" do
           # visit edit_user_identity_path(@identity)
@@ -50,7 +50,7 @@ describe UserIdentitiesController do
 
     describe 'PUT update' do
       before do
-        @identity = UserIdentity.find(conditions: {country:"Indoneasia"})
+        @identity = UserIdentity.last
         user_sign_in(@identity)
       end
       it "should update the identity and redirect" do

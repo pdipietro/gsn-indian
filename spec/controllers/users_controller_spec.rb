@@ -48,7 +48,7 @@ describe UsersController do
 
    describe 'PUT update' do
      before do
-       @identity = UserIdentity.find(conditions: {country:"Indoneasia"})
+       @identity = UserIdentity.last
        user_sign_in(@identity)
      end
      it "should update the user" do
@@ -64,7 +64,7 @@ describe UsersController do
 
   describe 'POST create_relation' do
      before do
-       @identity = UserIdentity.find(conditions: {country:"Indoneasia"})
+       @identity = UserIdentity.last
        user_sign_in(@identity)
      end
 
@@ -80,7 +80,7 @@ describe UsersController do
   
   describe "should destroy user" do  
     before do
-       @identity = UserIdentity.find(conditions: {country:"Indoneasia"})
+       @identity = UserIdentity.last
        user_sign_in(@identity)
     end
 

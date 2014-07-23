@@ -87,7 +87,7 @@ class UserIdentity
   end
 
 
-  def secure_password    
+  def secure_password 
     if (password_changed? or new_record?)
       self.password = UserIdentity.encrypt_password(email, password) 
     end
@@ -207,8 +207,10 @@ class UserIdentity
   def self.user_identity_fields
     identity_fields = Neo4j::Session.query('match (n:Model{name: "user identity"})-[:_HAS]->(m{complex: "false"})-[:_]->(t)-[:_IS_A]->(s)
       return m.name, m.cardinality, s.name, ID(m);').data
-    identity_fields.delete(["remember token", "1", "string", 311])
-    identity_fields.delete(["password digest", "1", "string", 312 ])
+    identity_fields.delete(["remember token", "1", "string", 312])
+    identity_fields.delete(["password digest", "1", "string", 313])
+    identity_fields.delete(["country", "1", "string", 314])
+
     identity_fields
   end
 

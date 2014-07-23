@@ -28,24 +28,24 @@ describe UserIdentity do
 	end
   
   
-  describe "when email address is already taken" do
-    before do     
-      identity_with_same_email = identity.dup
-      identity_with_same_email.save
-    end
-    it { should_not be_valid }
-  end
+  # describe "when email address is already taken" do
+  #   before do     
+  #     identity_with_same_email = identity.dup
+  #     identity_with_same_email.save
+  #   end
+  #   it { should_not be_valid }
+  # end
 
 
-  describe "password mismatch " do
-    before { identity.password_confirmation = "mismatch" }
-    it { should_not be_valid }  
-  end
+  # describe "password mismatch " do
+  #   before { identity.password_confirmation = "mismatch" }
+  #   it { should_not be_valid }  
+  # end
 
-  describe "password too short" do
-    before { identity.password = identity.password_confirmation = "a" * 5 }
-    it { should be_invalid }
-  end
+  # describe "password too short" do
+  #   before { identity.password = identity.password_confirmation = "a" * 5 }
+  #   it { should be_invalid }
+  # end
 
   # describe "identity associations" do
   #   it "should have many providers" do      

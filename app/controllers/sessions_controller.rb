@@ -8,6 +8,7 @@ class SessionsController < ApplicationController
 
   def create    
     identity = UserIdentity.find(conditions: {email: params[:session][:email].downcase})
+   
     if identity && UserIdentity.encrypt_password(identity.email, params[:session][:password]) == identity.password
       # Sign the user in and redirect to the user's show page.
       sign_in_user(identity, "normal")     
