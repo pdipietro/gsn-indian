@@ -3,10 +3,10 @@
 
 <div class="row">
   <div class="span6 offset3">
-    <%= form_tag user_identities_path, class: "form-signin auth_form" do |f| %>
+    <%= form_tag user_identities_path, class: "form-signin auth_form", remote: true do |f| %>
       <%#= f.hidden_field :provider, value: "normal" %>
       <%#= render 'shared/error_messages', object: f.object %>
-      <% @user_form_fields.each do |field| %>
+      <% @user_identity_fields.each do |field| %>
         <%= label_tag field[0] %>
         <%= generate_fields(field[0], field[1], field[2]) %>
       <% end %>
@@ -15,7 +15,11 @@
       <%= password_field_tag "user_identity[password]", "", autofocus: true, class: "form-control", placeholder: "Password", required: true%>
 
       <%= label_tag "Password Confirmation" %>
-      <%= password_field_tag "user_identity[password_confirmation]", "", autofocus: true, class: "form-control", placeholder: "Password Confirmation", required: true%>         
+      <%= password_field_tag "user_identity[password_confirmation]", "", autofocus: true, class: "form-control", placeholder: "Password Confirmation", required: true%>       
+      <% @user_fields.each do |field| %>
+        <%= label_tag field[0] %>
+        <%= generate_fields(field[0], field[1], field[2]) %>
+      <% end %>  
       <%= submit_tag "Create my account", class: "btn btn-large btn-primary" %>
     <% end %>
   </div>

@@ -70,55 +70,57 @@ class UserIdentitiesController < ApplicationController
     #   render 'new'
     #   return
     # end 
+    # respond_to do |format|
+      if @exist_identity.blank?        
+        if signed_in?
+           @user = current_user
+        else    
+          @user = User.new(first_name: params[:user_identity][:first_name],
+                         last_name: params[:user_identity][:last_name], 
+                         country: params[:user_identity][:country],
+                         other_languages: params[:user_identity][:other_languages],
+                         default_language: params[:user_identity][:default_language],                       
+                         ns: "ki"
+                     ) 
+          # user.create_users_relation                      
+        end
 
-    if @exist_identity.blank?        
-      if signed_in?
-         @user = current_user
-      else    
-        @user = User.new(first_name: params[:user_identity][:first_name],
-                       last_name: params[:user_identity][:last_name], 
-                       country: params[:user_identity][:country],
-                       other_languages: params[:user_identity][:other_languages],
-                       default_language: params[:user_identity][:default_language],                       
-                       ns: "ki"
-                   ) 
-        # user.create_users_relation                      
-      end
+        if @user.save
+          @identity = UserIdentity.new(country: params[:user_identity][:country], 
+            email:  params[:user_identity][:email_address], password: params[:user_identity][:password], 
+            password_confirmation: params[:user_identity][:password_confirmation], 
+            nickname: "#{params[:user_identity][:first_name]} #{params[:user_identity][:last_name]}", 
+            ns: "ki", provider: "normal")
 
-      if @user.save
-        @identity = UserIdentity.new(country: params[:user_identity][:country], 
-          email:  params[:user_identity][:email_address], password: params[:user_identity][:password], 
-          password_confirmation: params[:user_identity][:password_confirmation], 
-          nickname: "#{params[:user_identity][:first_name]} #{params[:user_identity][:last_name]}", 
-          ns: "ki", provider: "normal")
-
-        if @identity.save
-          @user.identities << @identity 
-          # @identity.user = user
-          @identity.identity_provider("normal")
-          
-          flash[:success] = signed_in? ? "Identity successfully created" : "Please verify your email"        
-          redirect_to @identity
+          if @identity.save
+            @user.identities << @identity 
+            # @identity.user = user
+            @identity.identity_provider("normal")
+            @success_identity = @identity
+            flash[:success] = signed_in? ? "Identity successfully created" : "Please verify your email"        
+            # format.html {redirect_to @identity}
+            # format.js {render :js => "window.location.href='/users/"+@identity.neo_id+"'"} 
+          else
+            show_flash_error_messages(@identity)
+            new_identity
+           # format.html { render 'new' }     
+          end
         else
-          show_flash_error_messages(@identity)
+          show_flash_error_messages(@user)     
           new_identity
-          render 'new'
+          # format.html { render 'new' }          
         end
       else
-        show_flash_error_messages(@user)     
-        new_identity
-        render 'new'
+        relation =  @exist_identity.identity_provider("normal")
+        
+        if relation == :error_messsage
+          @identity = @exist_identity
+          new_identity
+          flash[:danger] = "Identity already created"      
+          # format.html { render 'new' }     
+        end
       end
-    else
-      relation =  @exist_identity.identity_provider("normal")
-      
-      if relation == :error_messsage
-        @identity = @exist_identity
-        new_identity
-        flash[:danger] = "Identity already created"      
-        render 'new'
-      end
-    end
+    # end
   end
 
   def destroy
@@ -165,14 +167,16 @@ class UserIdentitiesController < ApplicationController
 
     def new_identity
       user_identity_fields = UserIdentity.user_identity_fields
-      user_fields = Neo4j::Session.query('match (n:Model{name: "user"})-[:_HAS]->(m{complex: "false"})-[:_]->(t)-[:_IS_A]->(s) 
-        return m.name, m.cardinality, s.name;').data
-      user_form_fields = user_fields + user_identity_fields
+      user_fields = Neo4j::Session.query('match (n:Model{name: "user"})-[r:_HAS]->(m{complex: "false"})-[:_]->(t)-[:_IS_A]->(s) 
+        return m.name, m.cardinality, s.name, ID(m), r.order;').data
+
+      # user_form_fields = user_fields + user_identity_fields
       # user_form_fields.delete(["remember token", "1", "string"])
       # user_form_fields.delete(["password digest", "1", "string"])
       # user_form_fields << ["password", "1", "string"]
       # user_form_fields << ["password_confirmation", "1", "string"]
-      @user_form_fields = user_form_fields.uniq
+      @user_identity_fields = user_identity_fields.uniq.sort_by{|k|k[4]}
+      @user_fields = user_fields.uniq.sort_by{|k|k[4]}
     end
 
   

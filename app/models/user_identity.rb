@@ -210,7 +210,7 @@ class UserIdentity
     # identity_fields.delete(["remember token", "1", "string", 312])
     # identity_fields.delete(["password digest", "1", "string", 313])
     # identity_fields.delete(["country", "1", "string", 314])
-     identity_fields = Neo4j::Session.query('match (n:Model{name: "user identity"})-[r:_HAS]->(m{complex: "false"})-[:_]->(t)-[:_IS_A]->(s) where r.show IS NULL AND  NOT(m.name="country") AND NOT(m.name="password") return m.name, m.cardinality, s.name, ID(m);').data
+     identity_fields = Neo4j::Session.query('match (n:Model{name: "user identity"})-[r:_HAS]->(m{complex: "false"})-[:_]->(t)-[:_IS_A]->(s) where r.show IS NULL AND  NOT(m.name="country") AND NOT(m.name="password") return m.name, m.cardinality, s.name, ID(m), r.order;').data
 
     identity_fields
   end

@@ -1,0 +1,6 @@
+<%# binding.pry %>
+<% if @success_identity.present? %>
+  window.location = "/users/<%= @success_identity.id %>" 
+<% else %>
+$("#alert_message_div").html("<%= escape_javascript(render(:partial => 'shared/alert_message')) %>")
+<% end %>
