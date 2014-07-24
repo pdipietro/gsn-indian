@@ -1,33 +1,37 @@
 class ServicesController < ApplicationController
 
   def create 
-    auth = env["omniauth.auth"] 
-    provider = auth.provider
-  
-    email = (auth.info.try(:email).present?) ? auth.info.email : "#{auth.info.nickname}@#{auth.provider}.com"
-    oauth_token = auth.credentials.token
-    oauth_expires_at = Time.at(auth.credentials.expires_at) if auth.credentials.expires_at
-   
-    identity = UserIdentity.find(conditions: {email: email})    
-    if identity.blank?       
-      identity = from_omniauth(auth, current_user, email, provider)      
+    if params[:oauth_problem].present?
+      redirect_to root_path
+      return
     end
+    # auth = env["omniauth.auth"] 
+    # provider = auth.provider
+  
+    # email = (auth.info.try(:email).present?) ? auth.info.email : "#{auth.info.nickname}@#{auth.provider}.com"
+    # oauth_token = auth.credentials.token
+    # oauth_expires_at = Time.at(auth.credentials.expires_at) if auth.credentials.expires_at
+   
+    # identity = UserIdentity.find(conditions: {email: email})    
+    # if identity.blank?       
+    #   identity = from_omniauth(auth, current_user, email, provider)      
+    # end
 
-    identity.identity_provider(provider, auth.uid, oauth_token, oauth_expires_at)
+    # identity.identity_provider(provider, auth.uid, oauth_token, oauth_expires_at)
 
-    unless identity.errors.any?
-      unless signed_in?  
-        sign_in_user(identity, provider)
-      end
-      flash[:success] = "Signed in successfully with #{provider}"      
-      if identity.user == current_user
-        redirect_to user_path(identity.user)
-      else
-        redirect_to root_path
-      end
-    else      
-      redirect_to root_path, :flash => { :error => show_error_messages(identity) }
-    end          
+    # unless identity.errors.any?
+    #   unless signed_in?  
+    #     sign_in_user(identity, provider)
+    #   end
+    #   flash[:success] = "Signed in successfully with #{provider}"      
+    #   if identity.user == current_user
+    #     redirect_to user_path(identity.user)
+    #   else
+    #     redirect_to root_path
+    #   end
+    # else      
+    #   redirect_to root_path, :flash => { :error => show_error_messages(identity) }
+    # end          
   end
 
 
@@ -39,7 +43,7 @@ class ServicesController < ApplicationController
   private
 
     def from_omniauth(auth, c_user, email, provider)
-      country = auth.info.location.split(',')[1].strip if auth.info.location.present?
+      country = auth.info.location.split(',')[1] if auth.info.location.present?
       country ||= "country"
       language = if (auth.extra.present? and auth.extra.raw_info.present? and auth.extra.raw_info.lang.present?)
                     auth.extra.raw_info.lang
