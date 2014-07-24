@@ -1,9 +1,10 @@
+var data_collection = '<%= raw [@data_collections.to_json][0].gsub(/'/){ "\\'" }.gsub(/"/){ '\\"' }%>'
 $("#graph-container").html("")
 <% if @error_message.present? %>
   show_error_message("<%= @error_message %>");
   
 <% else %>
-	graph_data = JSON.parse('<%= raw [@data_collections.to_json][0] %>');
+	graph_data = JSON.parse(data_collection);
 	var node_ids=[]
 	<% @check_node.each do |node| %> 
 	  node_ids.push(<%= node %>)
@@ -11,5 +12,4 @@ $("#graph-container").html("")
 
 	load_graph(graph_data, node_ids)
 <% end %>
-
 

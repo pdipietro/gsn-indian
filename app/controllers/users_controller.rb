@@ -11,7 +11,7 @@ class UsersController < ApplicationController
 
   def show
    
-    node_id = params[:id].present? ? params[:id] : params[:search_node]    
+    node_id = params[:id].present? ? params[:id] : params[:search_node].to_i    
     @node = Neo4j::Node.load(node_id)
     @check_node = []
     @data_collections = {}
