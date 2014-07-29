@@ -54,7 +54,7 @@
     );
    // context.textBaseline = "hanging";
 
-context.font=" 14px Verdana";
+context.font=" 14px sans-serif";
 context.fillStyle = 'green';
 context.fillText(relation_name, (sX+aX)/2, (sY+aY)/2);
 
