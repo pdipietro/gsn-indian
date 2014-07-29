@@ -29,7 +29,11 @@
     
      // Node properties
      var node_prop = ''
-      $.each(node.properties.node, function(property, value) {   
+      $.each(node.properties.node, function(property, value) { 
+      
+      // console.log(value.replace(/"/g, 'U+0022') )
+      
+       // repalced_value = value.replace(/["']/g, "")  
         node_prop += '<li><span style="color:red; margin-right: 20px; list-style: none">'+(property)+
         ':</span><span>'+value+'</span></li>'
       });
@@ -134,11 +138,12 @@
       //             '</div>' +
       //          '</foreignObject>' +
       //        '</svg>';
+           
 
             var data   = '<svg xmlns="http://www.w3.org/2000/svg" width="300" height="500">' +
                // '<image x="200" y="200" width="300" height="80" xlink:href="http://jenkov.com/images/layout/top-bar-logo.png" />' +
                '<foreignObject width="300" height="500">' +
-                '<div xmlns="http://www.w3.org/1999/xhtml" style="font-size:12px; background-color: white; border: 1px solid #bbb">' +
+                '<div xmlns="http://www.w3.org/1999/xhtml" style="font-size:12px; font-family: sans-serif; background-color: white; border: 1px solid #bbb">' +
                 // '<image xlink:href="http://localhost:3000/assets/img/img1.png" height="20px" width="20px"/>'+
                   // '<img src="http://localhost:3000/assets/img/img1.png" height="50" width="50" alt="img1"/>'+
                   '<span style="color:black; font-size: 18px">'+ node.label + '</span>'+
