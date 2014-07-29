@@ -32,7 +32,7 @@ class SessionsController < ApplicationController
       identity.confirmation_token = ""
       identity.save
       sign_in(identity, "normal")
-      redirect_to user_path(identity.user)
+      redirect_to user_path(identity.user.neo_id)
     else
       redirect_to root_path, error: "Token is invalid"
     end

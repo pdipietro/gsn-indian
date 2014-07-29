@@ -154,7 +154,8 @@ urls.forEach(function(url) {
           settings: {
             minNodeSize: 8,
             maxNodeSize: 16, 
-            doubleClickEnabled: false
+            doubleClickEnabled: false,
+            font: "sans-serif"
 
           }
         });   
