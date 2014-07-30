@@ -67,6 +67,10 @@ module CustomNodeRelationship
         label_html =  label.to_s
         label_html = "#{label_html} [#{node.neo_id}]"
         node_label =  prop_name.present? ? "#{prop_name.try(:humanize)}" : label.to_s
+       
+       # node.props.each do |k,v|
+       #   node.props[k] = v.to_s.encode("iso-8859-1").force_encoding("utf-8")
+       # end 
         node_label = "#{node_label} [#{node.neo_id}]"
         {
                    id:         node.neo_id.to_s,  

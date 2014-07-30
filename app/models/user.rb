@@ -6,6 +6,7 @@ class User
   property :id
   property :first_name
   property :last_name
+  property :name
   property :country
   property :color#, default: "#FF0000"
 
