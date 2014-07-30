@@ -167,7 +167,7 @@ class UserIdentitiesController < ApplicationController
 
     def new_identity
       user_identity_fields = UserIdentity.user_identity_fields
-      user_fields = Neo4j::Session.query('match (n:Model{name: "user"})-[r:_HAS]->(m{complex: "false"})-[:_]->(t)-[:_IS_A]->(s) 
+      user_fields = Neo4j::Session.query('match (n:Model{name: "user"})-[r:_HAS]->(m{complex: "false"})-[:_]->(t)-[:_IS_A]->(s) where r.show IS NULL
         return m.name, m.cardinality, s.name, ID(m), r.order;').data
 
       # user_form_fields = user_fields + user_identity_fields

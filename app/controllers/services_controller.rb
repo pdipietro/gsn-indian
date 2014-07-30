@@ -62,7 +62,8 @@ class ServicesController < ApplicationController
                            country: country ,
                            other_languages: language,
                            default_language: [language],                       
-                           ns: "ki"                        
+                           ns: "ki",
+                           name: "#{first_name} #{last_name}"                       
                            ) 
               end
 
